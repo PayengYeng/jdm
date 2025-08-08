@@ -7,7 +7,7 @@ Sebuah platform digital di mana para penggemar otomotif dapat menemukan informas
 [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://en.wikipedia.org/wiki/JavaScript)
 [![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)](https://www.php.net/)
 
-**[Lihat Demo Langsung]( jdmautohause.free.nf ) **
+[Lihat Demo Langsung](jdmautohause.free.nf)
 
 ## Tentang Proyek Ini
 
