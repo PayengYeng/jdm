@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Testimonial</title>
+    <link rel="icon" href="https://imgur.com/7EhoJPv.png" type="image/x-icon" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+      header {
+        background: #222;
+        color: white;
+        text-align: center;
+        padding: 20px;
+        position: relative;
+      }
+      .container {
+        width: 80%;
+        margin: auto;
+        overflow: hidden;
+        padding: 20px;
+      }
+      .container h2 {
+        text-align: center;
+      }
+      footer {
+        background: #222;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        margin-top: 20px;
+      }
+      .menu-toggle {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        background-color: #333;
+        padding: 10px;
+        border-radius: 5px;
+        color: white;
+        transition: background-color 0.3s;
+        z-index: 1000;
+      }
+      .menu-toggle:hover {
+        background-color: #555;
+      }
+      .menu-toggle .icon {
+        display: flex;
+        flex-direction: column;
+        margin-right: 10px;
+      }
+      .menu-toggle span {
+        display: block;
+        width: 20px;
+        height: 2px;
+        background-color: white;
+        margin-bottom: 5px;
+        transition: all 0.3s;
+      }
+      .menu-toggle span:hover {
+        background-color: #666;
+      }
+      .menu-text {
+        font-size: 18px;
+        color: white;
+      }
+      .menu {
+        display: none;
+        position: absolute;
+        top: 60px;
+        left: 20px;
+        background-color: #fff;
+        color: #000;
+        padding: 0 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: max-height 0.5s ease, padding 0.5s ease, opacity 0.5s ease;
+        z-index: 999;
+      }
+      .menu.active {
+        display: block;
+        max-height: 500px;
+        padding: 20px;
+        opacity: 1;
+      }
+      .menu ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .menu ul li {
+        margin: 10px 0;
+      }
+      .menu ul li a {
+        text-decoration: none;
+        color: #333;
+        font-size: 18px;
+        padding: 10px 20px;
+        display: block;
+        border-radius: 5px;
+        transition: background-color 0.3s, color 0.3s;
+        text-align: center;
+      }
+      .menu ul li a:hover {
+        background-color: #ddd;
+        color: #000;
+      }
+      @media (max-width: 768px) {
+        .container {
+          width: 100%;
+          padding: 10px;
+        }
+        .menu {
+          width: 100%;
+          left: 0;
+          top: 40px;
+          border-radius: 0;
+        }
+        .menu-toggle {
+          top: 5px;
+          left: 5px;
+        }
+        .testimonial {
+          width: 90%;
+        }
+      }
+      @media (max-width: 480px) {
+        .menu ul li a {
+          font-size: 16px;
+          padding: 8px 10px;
+        }
+        .search-container {
+          top: 10px;
+          right: 10px;
+        }
+        .search-bar {
+          top: 30px;
+          right: 10px;
+        }
+        .testimonial {
+          width: 100%;
+        }
+      }
+      .search-container {
+        text-align: right;
+        margin-top: 10px;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+      }
+      .search-button {
+        background-color: #333;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      .search-button:hover {
+        background-color: #555;
+      }
+      .search-button img {
+        width: 20px;
+        height: 20px;
+      }
+      .search-bar {
+        display: none;
+        position: absolute;
+        top: 40px;
+        right: 0;
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 5px;
+        width: 200px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .search-container:hover .search-bar {
+        display: block;
+      }
+      .search-bar input {
+        width: 100%;
+        border: none;
+        outline: none;
+        padding: 5px;
+      }
+      .testimonial-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        padding: 20px;
+      }
+      .testimonials {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+      }
+      .testimonial {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 300px;
+        text-align: center;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+      .testimonial:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      }
+      .testimonial img {
+        width: 100%;
+        height: 200px; /* Set a fixed height */
+        object-fit: cover; /* Ensure the image covers the area */
+        border-radius: 10px;
+        transition: transform 0.3s ease; /* Add transition for smooth effect */
+      }
+      .testimonial img:hover {
+        transform: scale(1.05);
+      }
+      .stars {
+        margin-top: 10px;
+      }
+      .stars i {
+        color: #f39c12;
+      }
+      .testimonial .name-box {
+        margin-top: 10px;
+        padding: 10px;
+        background-color: #333;
+        color: white;
+        border-radius: 5px;
+        font-weight: bold;
+        text-align: center;
+        width: calc(100% - 20px); /* Ensure it aligns with the padding */
+        box-sizing: border-box;
+        transition: background-color 0.3s;
+      }
+      .testimonial .name-box:hover {
+        background-color: #555; /* Slightly darker shade */
+      }
+      @media (max-width: 768px) {
+        .testimonial {
+          width: 90%;
+        }
+      }
+      @media (max-width: 480px) {
+        .testimonial {
+          width: 100%;
+        }
+      }
+      .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1000; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0, 0, 0); /* Fallback color */
+        background-color: rgba(0, 0, 0, 0.9); /* Black w/ opacity */
+      }
+      .modal-content {
+        margin: auto;
+        display: block;
+        width: 80%;
+        max-width: 700px;
+      }
+      .modal-content,
+      .modal-caption {
+        animation-name: zoom;
+        animation-duration: 0.6s;
+      }
+      @keyframes zoom {
+        from {
+          transform: scale(0);
+        }
+        to {
+          transform: scale(1);
+        }
+      }
+      .close {
+        position: absolute;
+        top: 15px;
+        right: 35px;
+        color: #fff;
+        font-size: 40px;
+        font-weight: bold;
+        transition: 0.3s;
+      }
+      .close:hover,
+      .close:focus {
+        color: #bbb;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .review-form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .review-form .form-group {
+        display: flex;
+        flex-direction: column;
+      }
+      .review-form label {
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+      .review-form input,
+      .review-form textarea,
+      .review-form select {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+      }
+      .review-form button {
+        padding: 10px 20px;
+        background-color: #333;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      .review-form button:hover {
+        background-color: #555;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="menu-toggle">
+      <div class="icon">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="menu-text">Menu</div>
+    </div>
+
+    <div id="menu" class="menu">
+      <ul>
+        <li><a href="JDM Autohause.html">Main Page</a></li>
+        <li><a href="shopping.html">Showroom</a></li>
+        <li><a href="sparepart.html">Spare part & Acc</a></li>
+        <li><a href="comunity.html">Comunity</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="event.html">Events</a></li>
+      </ul>
+    </div>
+    <header>
+      <h1>Testimonial JDM Autohause</h1>
+      <img
+        src="https://i.imgur.com/CaaJQ6Z.gif"
+        alt="Logo JDM Autohause"
+        width="10%"
+      />
+      <p>More Than Just Cars, It’s a Lifestyle.</p>
+      <div class="search-container">
+        <button class="search-button">
+          <img
+            src="https://img.icons8.com/ios-filled/50/ffffff/search--v1.png"
+            alt="Search Icon"
+          />
+        </button>
+        <div class="search-bar">
+          <input type="text" placeholder="Search..." />
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <h2>Testimonial</h2>
+      <div class="testimonial-container">
+        <div class="testimonials">
+          <div class="testimonial">
+            <img src="https://i.imgur.com/kz11RSn.png" alt="Customer Photo" />
+            <p>
+              "Pengalaman berbelanja di JDM Autohause sangat memuaskan!
+              Pelayanan yang ramah dan profesional Saya akan merekomendasikan
+              JDM Autohause kepada teman-teman saya."
+            </p>
+            <div class="stars">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <div class="name-box">Varva Nig**</div>
+          </div>
+          <div class="testimonial">
+            <img src="https://i.imgur.com/3TTmPrA.png" alt="Customer Photo" />
+            <p>
+              "JDM Autohause memberikan pengalaman berbelanja yang luar biasa.
+              Mobil yang saya beli sangat berkualitas dan sesuai dengan
+              ekspektasi saya. Saya sangat puas dengan pelayanan yang
+              diberikan."
+            </p>
+            <div class="stars">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <div class="name-box">Puyengs</div>
+          </div>
+          <div class="testimonial">
+            <img src="https://i.imgur.com/qgUHFLz.png" alt="Customer Photo" />
+            <p>
+              "Saya sangat senang dengan pelayanan di JDM Autohause. Mobil yang
+              saya beli sangat berkualitas,dalam kondisi yang baik dan sesuai
+              dengan harapan saya. Terima kasih JDM Autohause!"
+            </p>
+            <div class="stars">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <div class="name-box">Me***p</div>
+          </div>
+          <div class="testimonial">
+            <img src="https://i.imgur.com/gQXSI7N.png" alt="Customer Photo" />
+            <p>
+              "Pelayanan yang sangat baik dan mobil yang saya beli sangat
+              memuaskan. Terima kasih JDM Autohause! Saya pasti akan kembali
+              lagi."
+            </p>
+            <div class="stars">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <div class="name-box">Emily Davis</div>
+          </div>
+          <div class="testimonial">
+            <img src="https://i.imgur.com/hhRJxIC.png" alt="Customer Photo" />
+            <p>
+              "JDM Autohause adalah tempat terbaik untuk membeli mobil. Saya
+              sangat puas dengan pembelian saya. Pelayanan yang diberikan sangat
+              profesional."
+            </p>
+            <div class="stars">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <div class="name-box">Joko Kopling</div>
+          </div>
+          <div class="testimonial">
+            <img src="https://i.imgur.com/R3zfs5r.png" alt="Customer Photo" />
+            <p>
+              "Mobil yang saya beli di JDM Autohause sangat berkualitas dan
+              sesuai dengan harapan saya. Saya sangat merekomendasikan JDM
+              Autohause."
+            </p>
+            <div class="stars">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <div class="name-box">Raka Cinjur</div>
+          </div>
+          <div class="testimonial">
+            <img src="https://i.imgur.com/loLtUWp.png" alt="Customer Photo" />
+            <p>
+              "JDM Autohause memberikan pengalaman berbelanja yang tak
+              terlupakan. Mobil yang saya beli sangat memuaskan. Saya akan
+              kembali lagi untuk pembelian berikutnya."
+            </p>
+            <div class="stars">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <div class="name-box">Iyan Meong</div>
+          </div>
+          <div class="testimonial">
+            <img
+              src="https://down-id.img.susercontent.com/file/id-11134103-22100-mo3zf3n2t2ivdb.webp"
+              alt="Customer Photo"
+            />
+            <p>
+              "Saya membeli spare part di JDM Autohause dan sangat puas dengan
+              kualitasnya. Pelayanan yang diberikan juga sangat baik. Saya akan
+              merekomendasikan JDM Autohause kepada teman-teman saya."
+            </p>
+            <div class="stars">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <div class="name-box">Andi Lu**o</div>
+          </div>
+          <div class="testimonial">
+            <img
+              src="https://down-id.img.susercontent.com/file/id-11134103-23010-52l8ubvp09lv26.webp"
+              alt="Customer Photo"
+            />
+            <p>
+              "Spare part yang saya beli di JDM Autohause sangat berkualitas dan
+              sesuai dengan harapan saya. Pelayanan yang sangat baik. Saya
+              sangat puas dengan pembelian saya."
+            </p>
+            <div class="stars">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <div class="name-box">Mayfa</div>
+          </div>
+          <div class="testimonial">
+            <img
+              src="https://down-id.img.susercontent.com/file/id-11134103-7ras8-m3t0d9cjsvyyf4.webp"
+              alt="Customer Photo"
+            />
+            <p>
+              "Saya sangat puas dengan spare part yang saya beli di JDM
+              Autohause. Kualitasnya sangat baik serta masih baru dan sesuai
+              dengan ekspektasi saya. Terima kasih JDM Autohause!"
+            </p>
+            <div class="stars">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <div class="name-box">Yoan</div>
+          </div>
+          <div class="testimonial">
+            <img
+              src="https://images.tokopedia.net/img/cache/600/bjFkPX/2022/8/25/6f54c80a-bfd4-4538-8a4b-50b7555c760b.jpg.webp?ect=4g"
+              alt="Customer Photo"
+            />
+            <p>
+              "Pelayanan yang sangat baik dan spare part yang saya beli sangat
+              memuaskan.Barangnya juga masih baru Terima kasih JDM Autohause!
+              Saya pasti akan kembali lagi."
+            </p>
+            <div class="stars">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <div class="name-box">Dedi Sparepart</div>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <h2>Give your testimonial</h2>
+        <form id="review-form" class="review-form">
+          <div class="form-group">
+            <label for="name">Nama:</label>
+            <input type="text" id="name" name="name" required />
+          </div>
+          <div class="form-group">
+            <label for="review">Review:</label>
+            <textarea id="review" name="review" rows="4" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="rating">Rating:</label>
+            <select id="rating" name="rating" required>
+              <option value="5">5 Bintang</option>
+              <option value="4">4 Bintang</option>
+              <option value="3">3 Bintang</option>
+              <option value="2">2 Bintang</option>
+              <option value="1">1 Bintang</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="media">Upload Foto/Video:</label>
+            <input
+              type="file"
+              id="media"
+              name="media"
+              accept="image/*,video/*"
+            />
+          </div>
+          <button type="submit">Kirim Review</button>
+        </form>
+      </div>
+    </div>
+    <div id="myModal" class="modal">
+      <span class="close">&times;</span>
+      <img class="modal-content" id="img01" />
+      <div id="caption"></div>
+    </div>
+    <footer>
+      <div class="footer-logo-container">
+        <img
+          src="https://i.imgur.com/7EhoJPv.png"
+          alt="Logo Kiri"
+          class="footer-logo left-logo"
+          width="50px"
+          style="float: left; margin-right: 10px"
+        />
+        <p style="display: inline-block">
+          &copy; 2025 JDM Autohause. All Rights Reserved.
+        </p>
+        <img
+          src="https://i.imgur.com/7EhoJPv.png"
+          alt="Logo Kanan"
+          class="footer-logo right-logo"
+          width="50px"
+          style="float: right; margin-left: 10px"
+        />
+      </div>
+    </footer>
+    <script>
+      const menuToggle = document.querySelector(".menu-toggle");
+      const menu = document.querySelector("#menu");
+      menuToggle.addEventListener("click", () => {
+        menu.classList.toggle("active");
+      });
+
+      let currentSlide = 0;
+      const slides = document.querySelectorAll(".testimonial");
+      function moveSlide(direction) {
+        currentSlide += direction;
+        if (currentSlide < 0) {
+          currentSlide = slides.length - 1;
+        } else if (currentSlide >= slides.length) {
+          currentSlide = 0;
+        }
+        const offset = -currentSlide * 100;
+        slides.forEach((slide) => {
+          slide.style.transform = `translateX(${offset}%)`;
+        });
+      }
+
+      const modal = document.getElementById("myModal");
+      const modalImg = document.getElementById("img01");
+      const captionText = document.getElementById("caption");
+      const images = document.querySelectorAll(".testimonial img");
+      images.forEach((img) => {
+        img.addEventListener("click", function () {
+          modal.style.display = "block";
+          modalImg.src = this.src;
+          captionText.innerHTML = this.alt;
+        });
+      });
+      const span = document.getElementsByClassName("close")[0];
+      span.onclick = function () {
+        modal.style.display = "none";
+      };
+
+      document
+        .getElementById("review-form")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          const name = document.getElementById("name").value;
+          const review = document.getElementById("review").value;
+          const rating = document.getElementById("rating").value;
+          const media = document.getElementById("media").files[0];
+          const testimonialContainer = document.querySelector(".testimonials");
+          const newTestimonial = document.createElement("div");
+          newTestimonial.classList.add("testimonial");
+          let mediaHTML = "";
+          if (media) {
+            const mediaURL = URL.createObjectURL(media);
+            if (media.type.startsWith("image/")) {
+              mediaHTML = `<img src="${mediaURL}" alt="Uploaded Media" />`;
+            } else if (media.type.startsWith("video/")) {
+              mediaHTML = `<video controls width="100%"><source src="${mediaURL}" type="${media.type}">Your browser does not support the video tag.</video>`;
+            }
+          }
+          newTestimonial.innerHTML = `
+            ${mediaHTML}
+            <p>"${review}"</p>
+            <div class="stars">${'<i class="fas fa-star"></i>'.repeat(
+              rating
+            )}</div>
+            <div class="name-box">${name}</div>
+          `;
+          testimonialContainer.appendChild(newTestimonial);
+          document.getElementById("review-form").reset();
+        });
+    </script>
+  </body>
+</html>

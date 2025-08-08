@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About Us</title>
+    <link rel="icon" href="https://imgur.com/7EhoJPv.png" type="image/x-icon" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: "Roboto", sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        color: #333;
+      }
+      header {
+        background: linear-gradient(135deg, #222, #222);
+        color: white;
+        text-align: center;
+        padding: 40px 20px;
+        position: relative;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .container {
+        width: 80%;
+        margin: auto;
+        overflow: hidden;
+        padding: 20px;
+      }
+      footer {
+        background: #222;
+        color: white;
+        text-align: center;
+        padding: 20px;
+        margin-top: 20px;
+        box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .menu-toggle {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        background-color: #333;
+        padding: 10px;
+        border-radius: 5px;
+        color: white;
+        transition: background-color 0.3s;
+        z-index: 1000;
+      }
+      .menu-toggle:hover {
+        background-color: #555;
+      }
+      .menu-toggle .icon {
+        display: flex;
+        flex-direction: column;
+        margin-right: 10px;
+      }
+      .menu-toggle span {
+        display: block;
+        width: 20px;
+        height: 2px;
+        background-color: white;
+        margin-bottom: 5px;
+        transition: all 0.3s;
+      }
+      .menu-toggle span:hover {
+        background-color: #666;
+      }
+      .menu-text {
+        font-size: 18px;
+        color: white;
+      }
+      .menu {
+        display: none;
+        position: absolute;
+        top: 60px;
+        left: 20px;
+        background-color: #fff;
+        color: #000;
+        padding: 0 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: max-height 0.5s ease, padding 0.5s ease, opacity 0.5s ease;
+        z-index: 999;
+      }
+      .menu.active {
+        display: block;
+        max-height: 500px;
+        padding: 20px;
+        opacity: 1;
+      }
+      .menu ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .menu ul li {
+        margin: 10px 0;
+      }
+      .menu ul li a {
+        text-decoration: none;
+        color: #333;
+        font-size: 18px;
+        padding: 10px 20px;
+        display: block;
+        border-radius: 5px;
+        transition: background-color 0.3s, color 0.3s;
+        text-align: center;
+      }
+      .menu ul li a:hover {
+        background-color: #ddd;
+        color: #000;
+        transform: scale(1.05);
+      }
+      .search-container {
+        text-align: right;
+        margin-top: 10px;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+      }
+      .search-button {
+        background-color: #333;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      .search-button:hover {
+        background-color: #555;
+      }
+      .search-button img {
+        width: 20px;
+        height: 20px;
+      }
+      .search-bar {
+        display: none;
+        position: absolute;
+        top: 40px;
+        right: 0;
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 5px;
+        width: 200px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .search-container:hover .search-bar {
+        display: block;
+      }
+      .search-bar input {
+        width: 100%;
+        border: none;
+        outline: none;
+        padding: 5px;
+      }
+      .story-box {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        text-align: justify;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+      .story-box:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      }
+      .story-box p:hover {
+        color: #333;
+        background-color: #e0e0e0;
+        transition: background-color 0.3s, color 0.3s;
+      }
+      .story-box a:hover {
+        color: #ff0000;
+        text-decoration: underline;
+      }
+      .team-container {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin: 20px 0;
+      }
+      .team-box {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        flex: 1 1 calc(33.333% - 40px);
+        box-sizing: border-box;
+        text-align: center;
+        max-width: calc(33.333% - 40px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+      .team-box:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      }
+      .team-box img {
+        border-radius: 50%;
+        width: 140px;
+        height: 140px;
+        object-fit: cover;
+        margin-bottom: 10px;
+      }
+      .team-photo-container {
+        text-align: center;
+        margin-top: 20px;
+        position: relative;
+      }
+      .team-photo-container img {
+        max-width: 100%;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+      .team-photo-container img:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      }
+      @media (max-width: 768px) {
+        .menu {
+          width: 100%;
+          left: 0;
+          top: 40px;
+          border-radius: 0;
+        }
+        .menu-toggle {
+          top: 5px;
+          left: 5px;
+        }
+        .container {
+          width: 90%;
+          padding: 10px;
+        }
+        header {
+          padding: 10px;
+        }
+        .story-box {
+          padding: 15px;
+        }
+        .search-container {
+          top: 10px;
+          right: 10px;
+        }
+        .search-bar {
+          width: 150px;
+        }
+        .team-box {
+          flex: 1 1 calc(50% - 20px);
+          max-width: calc(50% - 20px);
+        }
+      }
+      @media (max-width: 480px) {
+        .menu ul li a {
+          font-size: 16px;
+          padding: 8px 10px;
+        }
+        .container {
+          width: 95%;
+          padding: 5px;
+        }
+        header {
+          padding: 5px;
+        }
+        .story-box {
+          padding: 10px;
+        }
+        .search-container {
+          top: 5px;
+          right: 5px;
+        }
+        .search-bar {
+          width: 120px;
+        }
+        .menu-toggle {
+          top: 5px;
+          left: 5px;
+        }
+        .menu ul li a {
+          font-size: 14px;
+          padding: 5px 8px;
+        }
+        .team-box {
+          flex: 1 1 100%;
+          max-width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="menu-toggle">
+      <div class="icon">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="menu-text">Menu</div>
+    </div>
+
+    <div id="menu" class="menu">
+      <ul>
+        <li><a href="JDM Autohause.html">Main Page</a></li>
+        <li><a href="shopping.html">Showroom</a></li>
+        <li><a href="sparepart.html">Spare part & Acc</a></li>
+        <li><a href="comunity.html">Comunity</a></li>
+        <li><a href="testimonial.html">Testimonial</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="event.html">Events</a></li>
+      </ul>
+    </div>
+    <header>
+      <h1>About JDM Autohause</h1>
+      <img
+        src="https://i.imgur.com/CaaJQ6Z.gif"
+        alt="Logo JDM Autohause"
+        width="10%"
+      />
+      <p>Learn more about our journey and mission.</p>
+      <div class="search-container">
+        <button class="search-button">
+          <img
+            src="https://img.icons8.com/ios-filled/50/ffffff/search--v1.png"
+            alt="Search Icon"
+          />
+        </button>
+        <div class="search-bar">
+          <input type="text" placeholder="Search..." />
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <h2 style="text-align: center">Our Story</h2>
+      <div class="story-box">
+        <p>
+          Di jantung kota Jakarta, di mana jalanan berdenyut dengan kehidupan
+          dan setiap sudut menyimpan kisah unik, lahirlah JDM Autohause. Bukan
+          sekadar bengkel mobil biasa, JDM Autohause adalah perwujudan mimpi,
+          hasrat yang membara, dan dedikasi tanpa henti terhadap dunia otomotif
+          Jepang. Kisah kami dimulai dari [nama pendiri], seorang [profesi
+          pendiri] muda yang tumbuh di tengah budaya otomotif yang dinamis.
+          Sejak kecil, [nama pendiri] terpesona oleh keindahan desain
+          mobil-mobil Jepang, ketangguhan mesinnya, dan inovasi teknologi yang
+          selalu mereka hadirkan. Bagi [nama pendiri], mobil bukan sekadar
+          kendaraan, melainkan karya seni, perpanjangan jiwa, dan simbol
+          kebebasan. [Nama pendiri] menghabiskan waktu berjam-jam membaca
+          majalah otomotif, menonton video balapan, dan mempelajari seluk-beluk
+          mesin. [Nama pendiri] bermimpi untuk memiliki bengkel sendiri, tempat
+          di mana [nama pendiri] dapat menyalurkan kecintaan pada mobil Jepang
+          dan berbagi pengalaman dengan sesama penggemar otomotif. Setelah
+          bertahun-tahun bekerja keras dan menabung, [nama pendiri] akhirnya
+          berhasil mewujudkan mimpinya. Pada tanggal [tanggal pendirian], JDM
+          Autohause resmi dibuka. Bengkel ini tidak hanya menawarkan jasa
+          perbaikan dan perawatan mobil, tetapi juga menjadi tempat berkumpul
+          bagi komunitas penggemar mobil Jepang. JDM Autohause dengan cepat
+          mendapatkan reputasi sebagai bengkel yang tidak hanya ahli dalam
+          memperbaiki mobil, tetapi juga memahami dan menghargai nilai-nilai
+          yang terkandung dalam setiap mobil Jepang. Kami percaya bahwa setiap
+          mobil memiliki cerita dan kepribadiannya sendiri. Oleh karena itu,
+          kami selalu berusaha untuk memberikan pelayanan yang personal dan
+          sesuai dengan kebutuhan masing-masing pelanggan. Kami tidak hanya
+          fokus pada perbaikan mobil, tetapi juga pada peningkatan performa dan
+          modifikasi. Kami bekerja sama dengan para ahli modifikasi terbaik
+          untuk menciptakan mobil-mobil impian yang unik dan sesuai dengan gaya
+          masing-masing pelanggan. Kami juga mengadakan acara-acara komunitas,
+          seperti gathering, track day, dan kontes modifikasi, untuk mempererat
+          tali silaturahmi antar penggemar mobil Jepang. JDM Autohause bukan
+          hanya sekadar bisnis, tetapi juga keluarga. Kami percaya bahwa
+          kesuksesan kami tidak lepas dari dukungan dan kepercayaan pelanggan.
+          Oleh karena itu, kami selalu berusaha untuk memberikan pelayanan yang
+          terbaik dan menjaga hubungan baik dengan pelanggan. Kami menyadari
+          bahwa dunia otomotif terus berkembang. Oleh karena itu, kami selalu
+          berupaya untuk mengikuti perkembangan teknologi dan tren terbaru. Kami
+          berinvestasi dalam peralatan dan pelatihan terbaru untuk memastikan
+          bahwa kami dapat memberikan pelayanan yang terbaik kepada pelanggan.
+          Kami berharap JDM Autohause dapat terus menjadi bagian dari perjalanan
+          otomotif Anda. Kami ingin menjadi mitra terpercaya Anda dalam merawat
+          dan memodifikasi mobil Jepang impian Anda. Mari bersama-sama kita
+          merayakan keindahan dan performa mobil Jepang!
+        </p>
+      </div>
+      <h2 style="text-align: center">Our Background</h2>
+      <div class="story-box">
+        <p>
+          JDM Autohause hadir sebagai showroom mobil yang menghadirkan pilihan
+          terbaik bagi para pecinta mobil, khususnya kendaraan berperforma
+          tinggi dari Jepang (Japanese Domestic Market/JDM). Berawal dari
+          kecintaan terhadap dunia otomotif dan komitmen untuk menghadirkan
+          kendaraan berkualitas, JDM Autohause menjadi destinasi utama bagi
+          mereka yang mencari mobil dengan performa, gaya, dan eksklusivitas
+          terbaik. Dengan pengalaman dalam industri otomotif, kami memahami
+          bahwa setiap pelanggan memiliki kebutuhan unik dalam memilih kendaraan
+          impian mereka. Oleh karena itu, kami menyediakan berbagai pilihan
+          mobil JDM original, mulai dari sport car legendaris hingga kendaraan
+          modifikasi siap jalan. Tidak hanya itu, kami juga menawarkan layanan
+          konsultasi, pembelian, serta pengurusan dokumen impor untuk memastikan
+          pengalaman transaksi yang mudah dan aman. JDM Autohause bukan sekadar
+          showroom, tetapi juga komunitas bagi para pecinta mobil untuk berbagi
+          pengalaman dan passion dalam dunia otomotif. Dengan komitmen terhadap
+          kualitas dan kepuasan pelanggan, kami siap membantu Anda menemukan
+          mobil impian dengan pelayanan terbaik.
+        </p>
+      </div>
+      <h2 style="text-align: center">Our Mission</h2>
+      <div class="story-box">
+        <p>
+          - Memberikan pelayanan perbaikan dan perawatan mobil Jepang yang
+          profesional dan berkualitas.<br />
+          - Menyediakan layanan modifikasi mobil Jepang yang kreatif dan
+          inovatif.<br />
+          - Membangun komunitas penggemar mobil Jepang yang solid dan
+          harmonis.<br />
+          - Mengikuti perkembangan teknologi dan tren otomotif terbaru.
+        </p>
+      </div>
+      <h2 style="text-align: center">Our Team</h2>
+      <div class="team-container">
+        <div class="team-box">
+          <img src="https://i.imgur.com/TrIAAwR.jpeg" alt="Team Member 1" />
+          <h3>Firah Samrotul Fuadah</h3>
+          <p>CEO, Web developer & IT team leader</p>
+        </div>
+        <div class="team-box">
+          <img src="https://i.imgur.com/n13x4Hm.jpeg" alt="Team Member 2" />
+          <h3>Trie Anantasya Febrianti</h3>
+          <p>Finance & administrationTeam, legal&compliance team</p>
+        </div>
+        <div class="team-box">
+          <img src="https://i.imgur.com/rWWG2yu.jpeg" alt="Team Member 3" />
+          <h3>Farel Ramda</h3>
+          <p>
+            Digital marketing & branding team, operational&product management
+            team
+          </p>
+        </div>
+      </div>
+      <div class="team-photo-container">
+        <img src="https://i.imgur.com/GU6t4ji.jpeg" alt="Our Team" />
+      </div>
+      <h2 style="text-align: center">Contact Us</h2>
+      <div class="story-box">
+        <p>
+          Jika Anda memiliki pertanyaan atau ingin mempelajari lebih lanjut
+          tentang penawaran kami, jangan ragu untuk menghubungi kami di
+          <a href="jdmauhause@gmail.com">jdmauhause@gmail.com</a>.
+        </p>
+      </div>
+    </div>
+    <footer>
+      <div class="footer-logo-container">
+        <img
+          src="https://i.imgur.com/7EhoJPv.png"
+          alt="Logo Kiri"
+          class="footer-logo left-logo"
+          width="50px"
+          style="float: left; margin-right: 10px"
+        />
+        <p style="display: inline-block">
+          &copy; 2025 JDM Autohause. All Rights Reserved.
+        </p>
+        <img
+          src="https://i.imgur.com/7EhoJPv.png"
+          alt="Logo Kanan"
+          class="footer-logo right-logo"
+          width="50px"
+          style="float: right; margin-left: 10px"
+        />
+      </div>
+    </footer>
+    <script>
+      const menuToggle = document.querySelector(".menu-toggle");
+      const menu = document.querySelector("#menu");
+      menuToggle.addEventListener("click", () => {
+        menu.classList.toggle("active");
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Showroom</title>
+    <link rel="icon" href="https://imgur.com/7EhoJPv.png" type="image/x-icon" />
+    <style>
+      /* General Styles */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+      header,
+      footer {
+        background: #222;
+        color: white;
+        text-align: center;
+        padding: 20px;
+      }
+      .container {
+        width: 80%;
+        margin: auto;
+        overflow: hidden;
+        padding: 20px;
+      }
+      .container h2 {
+        text-align: center;
+      }
+      footer {
+        margin-top: 20px;
+      }
+
+      /* Menu Toggle Styles */
+      .menu-toggle {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        background-color: #333;
+        padding: 10px;
+        border-radius: 5px;
+        color: white;
+        transition: background-color 0.3s;
+        z-index: 1000;
+      }
+      .menu-toggle:hover {
+        background-color: #555;
+      }
+      .menu-toggle .icon {
+        display: flex;
+        flex-direction: column;
+        margin-right: 10px;
+      }
+      .menu-toggle span {
+        display: block;
+        width: 20px;
+        height: 2px;
+        background-color: rgb(255, 255, 255);
+        margin-bottom: 5px;
+        transition: all 0.3s;
+      }
+      .menu-toggle span:hover {
+        background-color: #666;
+      }
+      .menu-text {
+        font-size: 18px;
+        color: white;
+      }
+
+      /* Menu Styles */
+      .menu {
+        display: none;
+        position: absolute;
+        top: 60px;
+        left: 20px;
+        background-color: #fff;
+        color: #000;
+        padding: 0 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: max-height 0.5s ease, padding 0.5s ease, opacity 0.5s ease;
+        z-index: 999;
+      }
+      .menu.active {
+        display: block;
+        max-height: 500px;
+        padding: 20px;
+        opacity: 1;
+      }
+      .menu ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .menu ul li {
+        margin: 10px 0;
+      }
+      .menu ul li a {
+        text-decoration: none;
+        color: #333;
+        font-size: 18px;
+        padding: 10px 20px;
+        display: block;
+        border-radius: 5px;
+        transition: background-color 0.3s, color 0.3s;
+        text-align: center;
+      }
+      .menu ul li a:hover {
+        background-color: #ddd;
+        color: #000;
+      }
+
+      /* Responsive Styles */
+      @media (max-width: 768px) {
+        .container {
+          width: 100%;
+          padding: 10px;
+        }
+        .car-gallery {
+          flex-direction: column;
+          align-items: center;
+        }
+        .car-item {
+          width: 90%;
+          margin-bottom: 20px;
+        }
+        .menu {
+          width: 100%;
+          left: 0;
+          top: 40px;
+          border-radius: 0;
+        }
+        .menu-toggle {
+          top: 5px;
+          left: 5px;
+        }
+      }
+      @media (max-width: 480px) {
+        .car-item {
+          width: 100%;
+        }
+        .menu ul li a {
+          font-size: 16px;
+          padding: 8px 10px;
+        }
+        .search-container {
+          top: 10px;
+          right: 10px;
+        }
+        .search-bar {
+          top: 30px;
+          right: 10px;
+        }
+      }
+
+      /* Car Gallery Styles */
+      .car-gallery {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+      }
+      .car-item {
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 300px;
+        text-align: center;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+      .car-item:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      }
+      .car-item img {
+        width: 95%; /* Increased width a bit more */
+        height: auto;
+        border-radius: 10px;
+        transition: opacity 0.3s;
+        object-fit: cover;
+        display: block;
+        margin: 0 auto;
+      }
+      .car-item img:hover {
+        opacity: 0.8;
+      }
+      .car-details {
+        margin-top: 10px;
+      }
+      .car-price {
+        font-size: 18px;
+        color: #333;
+        margin: 10px 0;
+      }
+      .order-button {
+        background-color: #333;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.3s;
+      }
+      .order-button:hover {
+        background-color: #8f8e8e;
+        transform: scale(1.1);
+      }
+
+      /* Footer Styles */
+      .footer-logo-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .footer-logo {
+        width: 50px;
+      }
+
+      /* Search Bar Styles */
+      .search-container {
+        text-align: right;
+        margin-top: 10px;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+      }
+      .search-button {
+        background-color: #333;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      .search-button:hover {
+        background-color: #555;
+      }
+      .search-button img {
+        width: 20px;
+        height: 20px;
+      }
+      .search-bar {
+        display: none;
+        position: absolute;
+        top: 40px;
+        right: 0;
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 5px;
+        width: 200px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .search-container:hover .search-bar {
+        display: block;
+      }
+      .search-bar input {
+        width: 100%;
+        border: none;
+        outline: none;
+        padding: 5px;
+      }
+
+      /* Modal Styles */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+      .modal-content {
+        background-color: #fff;
+        margin: 5% auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        width: 80%;
+        max-width: 700px; /* Increased max-width */
+        border-radius: 15px; /* More rounded corners */
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhanced shadow */
+        font-family: "Arial", sans-serif;
+        animation: fadeIn 0.5s; /* Fade-in animation */
+        text-align: center; /* Center content */
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      .modal-content h2 {
+        font-size: 28px;
+        margin-bottom: 15px;
+        color: #333;
+        text-align: center;
+      }
+      .modal-content p {
+        font-size: 18px;
+        color: #666;
+        margin-bottom: 15px;
+        text-align: justify;
+      }
+      .modal-content ul li {
+        background: #f1f1f1;
+        margin: 8px 0;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 16px;
+        color: #333;
+      }
+      .modal-content .quantity-container {
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .modal-content .quantity-container label {
+        margin-right: 15px;
+        font-size: 18px;
+        color: #333;
+      }
+      .modal-content .quantity-container input {
+        width: 70px;
+        padding: 8px;
+        font-size: 18px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        text-align: center;
+        pointer-events: none;
+      }
+      .modal-content .checkout-button {
+        background-color: #333;
+        color: white; /* Changed text color to white */
+        padding: 12px 25px;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        font-size: 18px;
+        font-weight: bold;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        margin-top: 25px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .modal-content .checkout-button:hover {
+        background-color: #555;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      }
+      .modal-content .checkout-button:active {
+        transform: translateY(0);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      }
+      .modal-content .close {
+        color: #aaa;
+        float: right;
+        font-size: 30px;
+        font-weight: bold;
+      }
+      .modal-content .close:hover,
+      .modal-content .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .modal-content img {
+        width: 100%;
+        height: auto;
+        max-width: 700px;
+        border-radius: 15px;
+        margin-bottom: 25px;
+        object-fit: cover;
+        display: block;
+        margin: 0 auto;
+      }
+      .features-benefits {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 25px;
+      }
+      .features-benefits div {
+        width: 45%;
+      }
+      .features-benefits h3 {
+        font-size: 20px;
+        color: #333;
+        margin-bottom: 15px;
+      }
+      .blur-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(5px);
+        z-index: 999;
+        display: none;
+      }
+      .modal.active ~ .blur-background {
+        display: block;
+      }
+      .modal-content .price {
+        font-size: 24px;
+        color: #ffffff;
+        font-weight: bold;
+        background-color: #333;
+        padding: 10px 20px;
+        border-radius: 10px;
+        display: inline-block;
+        margin: 20px auto;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="menu-toggle">
+      <div class="icon">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="menu-text">Menu</div>
+    </div>
+
+    <div id="menu" class="menu">
+      <ul>
+        <li><a href="JDM Autohause.html">Main Page</a></li>
+        <li><a href="sparepart.html">Spare part & Acc</a></li>
+        <li><a href="comunity.html">Comunity</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="testimonial.html">Testimonial</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="event.html">Events</a></li>
+      </ul>
+    </div>
+
+    <header>
+      <h1>Showroom JDM Autohause</h1>
+      <img
+        src="https://i.imgur.com/CaaJQ6Z.gif"
+        alt="Logo JDM Autohause"
+        width="10%"
+      />
+      <p>Find the best cars for you dreams.</p>
+      <div class="search-container">
+        <button class="search-button">
+          <img
+            src="https://img.icons8.com/ios-filled/50/ffffff/search--v1.png"
+            alt="Search Icon"
+          />
+        </button>
+        <div class="search-bar">
+          <input type="text" placeholder="Search..." />
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <h2>Showroom of JDM Autohause</h2>
+      <div class="car-gallery">
+        <div class="car-item">
+          <img src="https://i.imgur.com/jAOTuKA.jpeg" alt="Nissan GTR R34" />
+          <div class="car-details">
+            <h3>Nissan GTR R34</h3>
+            <p>
+              Mobil ini disebut sebagai satu-satunya kontribusi Jepang di dunia
+              mobil super.
+            </p>
+            <p class="car-price">Price: $120,000</p>
+            <button class="order-button" data-modal="nissanGtrR34Modal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="car-item">
+          <img
+            src="https://beautypic.ru/uploads/posts/2012-07/12_beautypic.ru.jpg"
+            alt="Toyota Supra MK4"
+          />
+          <div class="car-details">
+            <h3>Toyota Supra MK4</h3>
+            <p>Legenda kecepatan dengan mesin 2JZ yang legendaris.</p>
+            <p class="car-price">Price: $90,000</p>
+            <button class="order-button" data-modal="supraMk4Modal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="car-item">
+          <img
+            src="https://images7.alphacoders.com/447/447711.jpg"
+            alt="Mazda RX-7"
+          />
+          <div class="car-details">
+            <h3>Mazda RX-7</h3>
+            <p>Mobil sport yang menggunakan rotari berkapasitas silinder.</p>
+            <p class="car-price">Price: $70,000</p>
+            <button class="order-button" data-modal="mazdaRx7Modal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="car-item">
+          <img src="https://i.imgur.com/GAbnWll.jpeg" alt="Honda NSX" />
+          <div class="car-details">
+            <h3>Honda NSX</h3>
+            <p>Supercar Jepang dengan teknologi canggih.</p>
+            <p class="car-price">Price: $150,000</p>
+            <button class="order-button" data-modal="hondaNsxModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="car-item">
+          <img
+            src="https://i.imgur.com/NvkmLDB.png"
+            alt="Subaru Impreza WRX STI"
+          />
+          <div class="car-details">
+            <h3>Subaru Impreza WRX STI</h3>
+            <p>Mobil rally yang legendaris dengan penggerak semua roda.</p>
+            <p class="car-price">Price: $50,000</p>
+            <button class="order-button" data-modal="subaruImprezaModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="car-item">
+          <img
+            src="https://i.imgur.com/0TSs1S2.jpeg"
+            alt="Mitsubishi Lancer Evolution"
+          />
+          <div class="car-details">
+            <h3>Mitsubishi Lancer Evolution</h3>
+            <p>Mobil sport dengan performa yang sangat mumpuni.</p>
+            <p class="car-price">Price: $80,000</p>
+            <button class="order-button" data-modal="mitsubishiLancerModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="car-item">
+          <img
+            src="https://wallpapersmug.com/download/1680x1050/95bf28/white-honda-civic-type-r.jpg"
+            alt="Honda Civic Type R"
+          />
+          <div class="car-details">
+            <h3>Honda Civic Type R</h3>
+            <p>
+              Mobil hatchback dengan performa luar biasa untuk street racing.
+            </p>
+            <p class="car-price">Price: $40,000</p>
+            <button class="order-button" data-modal="hondaCivicTypeRModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="car-item">
+          <img src="https://i.imgur.com/2NtPRPi.jpeg" alt="Nissan 350Z" />
+          <div class="car-details">
+            <h3>Nissan 350Z</h3>
+            <p>Mobil sport dengan desain yang elegan dan performa tinggi.</p>
+            <p class="car-price">Price: $30,000</p>
+            <button class="order-button" data-modal="nissan350ZModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="car-item">
+          <img src="https://i.imgur.com/MN7LK0I.jpeg" alt="Toyota AE86" />
+          <div class="car-details">
+            <h3>Toyota AE86</h3>
+            <p>Mobil legendaris yang terkenal dalam dunia drifting.</p>
+            <p class="car-price">Price: $25,000</p>
+            <button class="order-button" data-modal="toyotaAe86Modal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="car-item">
+          <img src="https://i.imgur.com/pYZWRp0.jpeg" alt="Mercedes G-Class" />
+          <div class="car-details">
+            <h3>Mercedes G-Class</h3>
+            <p>
+              SUV mewah berpenggerak empat roda yang diproduksi oleh Magna
+              Steyr.
+            </p>
+            <p class="car-price">Price: $130,000</p>
+            <button class="order-button" data-modal="mercedesGClassModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="car-item">
+          <img
+            src="https://i.imgur.com/dxCwjC0.jpeg"
+            alt="Rolls Royce Phantom"
+          />
+          <div class="car-details">
+            <h3>Rolls Royce Phantom</h3>
+            <p>Mobil yang telah lama digemari oleh orang-orang kaya .</p>
+            <p class="car-price">Price: $450,000</p>
+            <button class="order-button" data-modal="rollsRoycePhantomModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="car-item">
+          <img src="https://i.imgur.com/mdDEREy.jpeg" alt="Porsche 911" />
+          <div class="car-details">
+            <h3>Porsche 911</h3>
+            <p>Model Porsche yang paling terkenal hingga kini.</p>
+            <p class="car-price">Price: $100,000</p>
+            <button class="order-button" data-modal="porsche911Modal">
+              Order Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="nissanGtrR34Modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://initiate.alphacoders.com/image_requests/597477-final.jpg"
+          alt="Nissan GTR R34"
+        />
+        <h2>Nissan GTR R34</h2>
+        <p class="price">$120,000</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Mobil ini disebut sebagai satu-satunya kontribusi Jepang di dunia
+          mobil super. Dengan mesin yang kuat dan desain yang elegan, Nissan GTR
+          R34 adalah pilihan yang sempurna untuk pecinta mobil sport. Mobil ini
+          dilengkapi dengan mesin turbocharged yang mampu menghasilkan tenaga
+          besar, desain aerodinamis yang meningkatkan performa, dan interior
+          mewah yang memberikan kenyamanan maksimal. Selain itu, Nissan GTR R34
+          kompatibel dengan berbagai jenis modifikasi, sehingga Anda dapat
+          menyesuaikan mobil ini sesuai dengan keinginan Anda.
+        </p>
+        <h3>Detail Mobil</h3>
+        <ul>
+          <li>Mesin: 2.6L RB26DETT Twin-Turbo Inline-6</li>
+          <li>Tenaga: 276 HP @ 6800 RPM</li>
+          <li>Torsi: 293 lb-ft @ 4400 RPM</li>
+          <li>Transmisi: 6-speed manual</li>
+          <li>Penggerak: All-Wheel Drive (AWD)</li>
+          <li>0-100 km/h: 4.9 detik</li>
+          <li>Kecepatan Maksimal: 250 km/h</li>
+          <li>Berat: 1560 kg</li>
+          <li>Dimensi (P x L x T): 4600 mm x 1785 mm x 1360 mm</li>
+        </ul>
+        <div class="quantity-container">
+          <label for="quantity-nissanGtrR34">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-nissanGtrR34"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Nissan GTR R34"
+          data-price="120000"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+
+    <div id="supraMk4Modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://beautypic.ru/uploads/posts/2012-07/12_beautypic.ru.jpg"
+          alt="Toyota Supra MK4"
+        />
+        <h2>Toyota Supra MK4</h2>
+        <p class="price">$90,000</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Toyota Supra MK4 adalah legenda kecepatan dengan mesin 2JZ yang
+          legendaris. Mobil ini terkenal dengan performa tinggi dan kemampuan
+          modifikasi yang luar biasa. Dengan desain yang ikonik dan teknologi
+          canggih, Supra MK4 menjadi pilihan utama bagi para penggemar mobil
+          sport.
+        </p>
+        <h3>Detail Mobil</h3>
+        <ul>
+          <li>Mesin: 3.0L 2JZ-GTE Twin-Turbo Inline-6</li>
+          <li>Tenaga: 320 HP @ 5600 RPM</li>
+          <li>Torsi: 315 lb-ft @ 4000 RPM</li>
+          <li>Transmisi: 6-speed manual</li>
+          <li>Penggerak: Rear-Wheel Drive (RWD)</li>
+          <li>0-100 km/h: 4.6 detik</li>
+          <li>Kecepatan Maksimal: 250 km/h</li>
+          <li>Berat: 1560 kg</li>
+          <li>Dimensi (P x L x T): 4520 mm x 1810 mm x 1275 mm</li>
+        </ul>
+        <div class="quantity-container">
+          <label for="quantity-supraMk4">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-supraMk4"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Toyota Supra MK4"
+          data-price="90000"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+
+    <div id="mazdaRx7Modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://images7.alphacoders.com/447/447711.jpg"
+          alt="Mazda RX-7"
+        />
+        <h2>Mazda RX-7</h2>
+        <p class="price">$70,000</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Mazda RX-7 adalah mobil sport yang menggunakan mesin rotari
+          berkapasitas silinder. Mobil ini terkenal dengan desainnya yang
+          aerodinamis dan performa tinggi. RX-7 menawarkan pengalaman berkendara
+          yang luar biasa dengan handling yang presisi dan akselerasi yang
+          cepat.
+        </p>
+        <h3>Detail Mobil</h3>
+        <ul>
+          <li>Mesin: 1.3L 13B-REW Twin-Turbo Rotary</li>
+          <li>Tenaga: 276 HP @ 6500 RPM</li>
+          <li>Torsi: 231 lb-ft @ 5000 RPM</li>
+          <li>Transmisi: 5-speed manual</li>
+          <li>Penggerak: Rear-Wheel Drive (RWD)</li>
+          <li>0-100 km/h: 5.3 detik</li>
+          <li>Kecepatan Maksimal: 250 km/h</li>
+          <li>Berat: 1280 kg</li>
+          <li>Dimensi (P x L x T): 4285 mm x 1760 mm x 1230 mm</li>
+        </ul>
+        <div class="quantity-container">
+          <label for="quantity-mazdaRx7">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-mazdaRx7"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Mazda RX-7"
+          data-price="70000"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+
+    <div id="hondaNsxModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://initiate.alphacoders.com/image_requests/597483-final.jpg"
+          alt="Honda NSX"
+        />
+        <h2>Honda NSX</h2>
+        <p class="price">$150,000</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Honda NSX adalah supercar Jepang dengan teknologi canggih. Mobil ini
+          menawarkan performa tinggi dengan mesin yang kuat dan desain yang
+          futuristik. NSX dilengkapi dengan berbagai fitur modern yang
+          meningkatkan kenyamanan dan keselamatan berkendara.
+        </p>
+        <h3>Detail Mobil</h3>
+        <ul>
+          <li>Mesin: 3.5L Twin-Turbo V6 Hybrid</li>
+          <li>Tenaga: 573 HP @ 6500 RPM</li>
+          <li>Torsi: 476 lb-ft @ 2000-6000 RPM</li>
+          <li>Transmisi: 9-speed dual-clutch automatic</li>
+          <li>Penggerak: All-Wheel Drive (AWD)</li>
+          <li>0-100 km/h: 2.9 detik</li>
+          <li>Kecepatan Maksimal: 307 km/h</li>
+          <li>Berat: 1725 kg</li>
+          <li>Dimensi (P x L x T): 4487 mm x 1939 mm x 1204 mm</li>
+        </ul>
+        <div class="quantity-container">
+          <label for="quantity-hondaNsx">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-hondaNsx"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Honda NSX"
+          data-price="150000"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+
+    <div id="subaruImprezaModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://i.imgur.com/NvkmLDB.png"
+          alt="Subaru Impreza WRX STI"
+        />
+        <h2>Subaru Impreza WRX STI</h2>
+        <p class="price">$50,000</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Subaru Impreza WRX STI adalah mobil rally yang legendaris dengan
+          penggerak semua roda. Mobil ini terkenal dengan performa tinggi dan
+          kemampuan off-road yang luar biasa. WRX STI menawarkan pengalaman
+          berkendara yang dinamis dengan handling yang presisi dan akselerasi
+          yang cepat.
+        </p>
+        <h3>Detail Mobil</h3>
+        <ul>
+          <li>Mesin: 2.5L Turbocharged Boxer-4</li>
+          <li>Tenaga: 310 HP @ 6000 RPM</li>
+          <li>Torsi: 290 lb-ft @ 4000 RPM</li>
+          <li>Transmisi: 6-speed manual</li>
+          <li>Penggerak: All-Wheel Drive (AWD)</li>
+          <li>0-100 km/h: 5.0 detik</li>
+          <li>Kecepatan Maksimal: 250 km/h</li>
+          <li>Berat: 1500 kg</li>
+          <li>Dimensi (P x L x T): 4595 mm x 1795 mm x 1475 mm</li>
+        </ul>
+        <div class="quantity-container">
+          <label for="quantity-subaruImpreza">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-subaruImpreza"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Subaru Impreza WRX STI"
+          data-price="50000"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+
+    <div id="mitsubishiLancerModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://i.imgur.com/0TSs1S2.jpeg"
+          alt="Mitsubishi Lancer Evolution"
+        />
+        <h2>Mitsubishi Lancer Evolution</h2>
+        <p class="price">$80,000</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Mitsubishi Lancer Evolution adalah mobil sport dengan performa yang
+          sangat mumpuni. Mobil ini terkenal dengan kemampuan handling yang luar
+          biasa dan akselerasi yang cepat. Lancer Evolution menawarkan
+          pengalaman berkendara yang dinamis dan menyenangkan.
+        </p>
+        <h3>Detail Mobil</h3>
+        <ul>
+          <li>Mesin: 2.0L Turbocharged Inline-4</li>
+          <li>Tenaga: 291 HP @ 6500 RPM</li>
+          <li>Torsi: 300 lb-ft @ 4000 RPM</li>
+          <li>Transmisi: 5-speed manual</li>
+          <li>Penggerak: All-Wheel Drive (AWD)</li>
+          <li>0-100 km/h: 4.9 detik</li>
+          <li>Kecepatan Maksimal: 250 km/h</li>
+          <li>Berat: 1560 kg</li>
+          <li>Dimensi (P x L x T): 4495 mm x 1810 mm x 1480 mm</li>
+        </ul>
+        <div class="quantity-container">
+          <label for="quantity-mitsubishiLancer">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-mitsubishiLancer"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Mitsubishi Lancer Evolution"
+          data-price="80000"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+    <div id="hondaCivicTypeRModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://wallpapersmug.com/download/1680x1050/95bf28/white-honda-civic-type-r.jpg"
+          alt="Honda Civic Type R"
+        />
+        <h2>Honda Civic Type R</h2>
+        <p class="price">$40,000</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Honda Civic Type R adalah mobil hatchback dengan performa luar biasa
+          untuk street racing. Mobil ini menawarkan akselerasi yang cepat,
+          handling yang presisi, dan desain yang sporty. Civic Type R adalah
+          pilihan yang sempurna bagi para penggemar mobil performa tinggi.
+        </p>
+        <h3>Detail Mobil</h3>
+        <ul>
+          <li>Mesin: 2.0L Turbocharged Inline-4</li>
+          <li>Tenaga: 306 HP @ 6500 RPM</li>
+          <li>Torsi: 295 lb-ft @ 2500-4500 RPM</li>
+          <li>Transmisi: 6-speed manual</li>
+          <li>Penggerak: Front-Wheel Drive (FWD)</li>
+          <li>0-100 km/h: 5.7 detik</li>
+          <li>Kecepatan Maksimal: 272 km/h</li>
+          <li>Berat: 1380 kg</li>
+          <li>Dimensi (P x L x T): 4557 mm x 1877 mm x 1434 mm</li>
+        </ul>
+        <div class="quantity-container">
+          <label for="quantity-hondaCivicTypeR">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-hondaCivicTypeR"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Honda Civic Type R"
+          data-price="40000"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+    <div id="nissan350ZModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://initiate.alphacoders.com/image_requests/606597-final.png"
+          alt="Nissan 350Z"
+        />
+        <h2>Nissan 350Z</h2>
+        <p class="price">$30,000</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Nissan 350Z adalah mobil sport dengan desain yang elegan dan performa
+          tinggi. Mobil ini menawarkan akselerasi yang cepat, handling yang
+          presisi, dan kenyamanan berkendara yang luar biasa. 350Z adalah
+          pilihan yang sempurna bagi para penggemar mobil sport.
+        </p>
+        <h3>Detail Mobil</h3>
+        <ul>
+          <li>Mesin: 3.5L V6</li>
+          <li>Tenaga: 306 HP @ 6800 RPM</li>
+          <li>Torsi: 268 lb-ft @ 4800 RPM</li>
+          <li>Transmisi: 6-speed manual</li>
+          <li>Penggerak: Rear-Wheel Drive (RWD)</li>
+          <li>0-100 km/h: 5.5 detik</li>
+          <li>Kecepatan Maksimal: 250 km/h</li>
+          <li>Berat: 1460 kg</li>
+          <li>Dimensi (P x L x T): 4310 mm x 1815 mm x 1320 mm</li>
+        </ul>
+        <div class="quantity-container">
+          <label for="quantity-nissan350Z">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-nissan350Z"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Nissan 350Z"
+          data-price="30000"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+
+    <div id="toyotaAe86Modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://initiate.alphacoders.com/image_requests/606606-final.jpg"
+          alt="Toyota AE86"
+        />
+        <h2>Toyota AE86</h2>
+        <p class="price">$25,000</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Toyota AE86 adalah mobil legendaris yang terkenal dalam dunia
+          drifting. Mobil ini menawarkan performa yang luar biasa dengan
+          handling yang presisi dan akselerasi yang cepat. AE86 adalah pilihan
+          yang sempurna bagi para penggemar mobil sport klasik.
+        </p>
+        <h3>Detail Mobil</h3>
+        <ul>
+          <li>Mesin: 1.6L Inline-4</li>
+          <li>Tenaga: 130 HP @ 6600 RPM</li>
+          <li>Torsi: 110 lb-ft @ 5200 RPM</li>
+          <li>Transmisi: 5-speed manual</li>
+          <li>Penggerak: Rear-Wheel Drive (RWD)</li>
+          <li>0-100 km/h: 8.5 detik</li>
+          <li>Kecepatan Maksimal: 200 km/h</li>
+          <li>Berat: 970 kg</li>
+          <li>Dimensi (P x L x T): 4200 mm x 1625 mm x 1335 mm</li>
+        </ul>
+        <div class="quantity-container">
+          <label for="quantity-toyotaAe86">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-toyotaAe86"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Toyota AE86"
+          data-price="25000"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+    <div id="mercedesGClassModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img src="https://i.imgur.com/pYZWRp0.jpeg" alt="Mercedes G-Class" />
+        <h2>Mercedes G-Class</h2>
+        <p class="price">$130,000</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Mercedes G-Class adalah SUV mewah berpenggerak empat roda yang
+          diproduksi oleh Magna Steyr. Mobil ini menawarkan kenyamanan dan
+          performa yang luar biasa dengan desain yang ikonik. G-Class adalah
+          pilihan yang sempurna bagi mereka yang mencari kemewahan dan kemampuan
+          off-road.
+        </p>
+        <h3>Detail Mobil</h3>
+        <ul>
+          <li>Mesin: 4.0L Twin-Turbo V8</li>
+          <li>Tenaga: 416 HP @ 5250 RPM</li>
+          <li>Torsi: 450 lb-ft @ 2000-4750 RPM</li>
+          <li>Transmisi: 9-speed automatic</li>
+          <li>Penggerak: All-Wheel Drive (AWD)</li>
+          <li>0-100 km/h: 5.6 detik</li>
+          <li>Kecepatan Maksimal: 210 km/h</li>
+          <li>Berat: 2485 kg</li>
+          <li>Dimensi (P x L x T): 4817 mm x 1931 mm x 1969 mm</li>
+        </ul>
+        <div class="quantity-container">
+          <label for="quantity-mercedesGClass">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-mercedesGClass"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Mercedes G-Class"
+          data-price="130000"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+    <div id="rollsRoycePhantomModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img src="https://i.imgur.com/dxCwjC0.jpeg" alt="Rolls Royce Phantom" />
+        <h2>Rolls Royce Phantom</h2>
+        <p class="price">$450,000</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Rolls Royce Phantom adalah mobil yang telah lama digemari oleh
+          orang-orang kaya. Mobil ini menawarkan kemewahan dan kenyamanan yang
+          tiada tanding. Phantom dilengkapi dengan berbagai fitur canggih dan
+          material berkualitas tinggi yang memberikan pengalaman berkendara yang
+          luar biasa.
+        </p>
+        <h3>Detail Mobil</h3>
+        <ul>
+          <li>Mesin: 6.75L V12</li>
+          <li>Tenaga: 563 HP @ 5000 RPM</li>
+          <li>Torsi: 664 lb-ft @ 1700 RPM</li>
+          <li>Transmisi: 8-speed automatic</li>
+          <li>Penggerak: Rear-Wheel Drive (RWD)</li>
+          <li>0-100 km/h: 5.1 detik</li>
+          <li>Kecepatan Maksimal: 250 km/h</li>
+          <li>Berat: 2560 kg</li>
+          <li>Dimensi (P x L x T): 5982 mm x 2018 mm x 1656 mm</li>
+        </ul>
+        <div class="quantity-container">
+          <label for="quantity-rollsRoycePhantom">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-rollsRoycePhantom"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Rolls Royce Phantom"
+          data-price="450000"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+    <div id="porsche911Modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://initiate.alphacoders.com/image_requests/606580-final.jpg"
+          alt="Porsche 911"
+        />
+        <h2>Porsche 911</h2>
+        <p class="price">$100,000</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Porsche 911 adalah model Porsche yang paling terkenal hingga kini.
+          Mobil ini menawarkan performa tinggi dengan desain yang ikonik. 911
+          dilengkapi dengan teknologi canggih dan fitur-fitur modern yang
+          memberikan pengalaman berkendara yang luar biasa.
+        </p>
+        <h3>Detail Mobil</h3>
+        <ul>
+          <li>Mesin: 3.0L Twin-Turbo Flat-6</li>
+          <li>Tenaga: 443 HP @ 6500 RPM</li>
+          <li>Torsi: 390 lb-ft @ 2300-5000 RPM</li>
+          <li>Transmisi: 8-speed dual-clutch automatic</li>
+          <li>Penggerak: Rear-Wheel Drive (RWD)</li>
+          <li>0-100 km/h: 3.5 detik</li>
+          <li>Kecepatan Maksimal: 308 km/h</li>
+          <li>Berat: 1505 kg</li>
+          <li>Dimensi (P x L x T): 4519 mm x 1852 mm x 1298 mm</li>
+        </ul>
+        <div class="quantity-container">
+          <label for="quantity-porsche911">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-porsche911"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Porsche 911"
+          data-price="100000"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+
+    <footer>
+      <div class="footer-logo-container">
+        <img
+          src="https://i.imgur.com/7EhoJPv.png"
+          alt="Logo Kiri"
+          class="footer-logo left-logo"
+          width="50px"
+        />
+        <p>&copy; 2025 JDM Autohause. All Rights Reserved.</p>
+        <img
+          src="https://i.imgur.com/7EhoJPv.png"
+          alt="Logo Kanan"
+          class="footer-logo right-logo"
+          width="50px"
+        />
+      </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+      const menuToggle = document.querySelector(".menu-toggle");
+      const menu = document.querySelector("#menu");
+      const blurBackground = document.getElementById("blurBackground");
+      menuToggle.addEventListener("click", () => {
+        menu.classList.toggle("active");
+      });
+
+      const modals = document.querySelectorAll(".modal");
+      const orderButtons = document.querySelectorAll(".order-button");
+      const closeButtons = document.querySelectorAll(".close");
+
+      orderButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const modalId = button.getAttribute("data-modal");
+          const modal = document.getElementById(modalId);
+          modal.style.display = "block";
+          modal.classList.add("active");
+          blurBackground.style.display = "block";
+        });
+      });
+
+      closeButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const modal = button.closest(".modal");
+          modal.style.display = "none";
+          modal.classList.remove("active");
+          blurBackground.style.display = "none";
+        });
+      });
+
+      window.addEventListener("click", (event) => {
+        modals.forEach((modal) => {
+          if (event.target == modal) {
+            modal.style.display = "none";
+            modal.classList.remove("active");
+            blurBackground.style.display = "none";
+          }
+        });
+      });
+
+      const checkoutButtons = document.querySelectorAll(".checkout-button");
+
+      checkoutButtons.forEach((button) => {
+        button.addEventListener("click", (event) => {
+          const quantityInput =
+            button.previousElementSibling.querySelector("input");
+          quantityInput.value = 1;
+          const quantity = quantityInput.value;
+          const product = button.getAttribute("data-product");
+          const unitPrice = button.getAttribute("data-price");
+          window.location.href = `checkout.html?product=${product}&quantity=${quantity}&unitPrice=${unitPrice}`;
+        });
+      });
+      const quantityInputs = document.querySelectorAll('input[type="number"]');
+      quantityInputs.forEach((input) => {
+        input.addEventListener("input", () => {
+          input.value = 1;
+        });
+      });
+    </script>
+    <div class="blur-background" id="blurBackground"></div>
+  </body>
+</html>

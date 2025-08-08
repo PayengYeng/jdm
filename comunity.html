@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Comunity</title>
+    <link rel="icon" href="https://imgur.com/7EhoJPv.png" type="image/x-icon" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+      header {
+        background: #222;
+        color: white;
+        text-align: center;
+        padding: 20px;
+        position: relative;
+      }
+      .container {
+        width: 80%;
+        margin: auto;
+        overflow: hidden;
+        padding: 20px;
+      }
+      footer {
+        background: #222;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        margin-top: 20px;
+      }
+      .menu-toggle {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        background-color: #333;
+        padding: 10px;
+        border-radius: 5px;
+        color: white;
+        transition: background-color 0.3s;
+        z-index: 1000;
+      }
+      .menu-toggle:hover {
+        background-color: #555;
+      }
+      .menu-toggle .icon {
+        display: flex;
+        flex-direction: column;
+        margin-right: 10px;
+      }
+      .menu-toggle span {
+        display: block;
+        width: 20px;
+        height: 2px;
+        background-color: white;
+        margin-bottom: 5px;
+        transition: all 0.3s;
+      }
+      .menu-toggle span:hover {
+        background-color: #666;
+      }
+      .menu-text {
+        font-size: 18px;
+        color: white;
+      }
+      .menu {
+        display: none;
+        position: absolute;
+        top: 60px;
+        left: 20px;
+        background-color: #fff;
+        color: #000;
+        padding: 0 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: max-height 0.5s ease, padding 0.5s ease, opacity 0.5s ease;
+        z-index: 999;
+      }
+      .menu.active {
+        display: block;
+        max-height: 500px;
+        padding: 20px;
+        opacity: 1;
+      }
+      .menu ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .menu ul li {
+        margin: 10px 0;
+      }
+      .menu ul li a {
+        text-decoration: none;
+        color: #333;
+        font-size: 18px;
+        padding: 10px 20px;
+        display: block;
+        border-radius: 5px;
+        transition: background-color 0.3s, color 0.3s;
+        text-align: center;
+      }
+      .menu ul li a:hover {
+        background-color: #ddd;
+        color: #000;
+      }
+      @media (max-width: 768px) {
+        .container {
+          width: 100%;
+          padding: 10px;
+        }
+        .gallery img {
+          flex: 1 1 calc(50% - 10px);
+          max-width: calc(50% - 10px);
+        }
+        .menu {
+          width: 100%;
+          left: 0;
+          top: 40px;
+          border-radius: 0;
+        }
+        .menu-toggle {
+          top: 5px;
+          left: 5px;
+        }
+        .search-container {
+          top: 10px;
+          right: 10px;
+        }
+        .search-bar {
+          top: 30px;
+          right: 10px;
+        }
+      }
+      @media (max-width: 480px) {
+        .gallery img {
+          flex: 1 1 100%;
+          max-width: 100%;
+        }
+        .menu ul li a {
+          font-size: 16px;
+          padding: 8px 10px;
+        }
+        .search-container {
+          top: 10px;
+          right: 10px;
+        }
+        .search-bar {
+          top: 30px;
+          right: 10px;
+        }
+      }
+      .search-container {
+        text-align: right;
+        margin-top: 10px;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+      }
+      .search-button {
+        background-color: #333;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      .search-button:hover {
+        background-color: #555;
+      }
+      .search-button img {
+        width: 20px;
+        height: 20px;
+      }
+      .search-bar {
+        display: none;
+        position: absolute;
+        top: 40px;
+        right: 0;
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 5px;
+        width: 200px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .search-container:hover .search-bar {
+        display: block;
+      }
+      .search-bar input {
+        width: 100%;
+        border: none;
+        outline: none;
+        padding: 5px;
+      }
+      .gallery {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+      .gallery img {
+        flex: 1 1 calc(33.333% - 20px);
+        margin: 10px;
+        max-width: calc(33.333% - 20px);
+        box-sizing: border-box;
+        transition: transform 0.3s ease;
+        border: 2px solid rgb(0, 0, 0);
+      }
+      .gallery img:hover {
+        transform: scale(1.1);
+      }
+      @media (max-width: 768px) {
+        .gallery img {
+          flex: 1 1 calc(50% - 20px);
+          max-width: calc(50% - 20px);
+        }
+      }
+      @media (max-width: 480px) {
+        .gallery img {
+          flex: 1 1 100%;
+          max-width: 100%;
+        }
+      }
+      h2 {
+        text-align: center;
+      }
+      .social-media {
+        text-align: center;
+        margin-top: 20px;
+      }
+      .social-media a {
+        margin: 0 10px;
+        text-decoration: none;
+        color: #333;
+        font-size: 24px;
+        transition: color 0.3s;
+      }
+      .social-media a:hover {
+        color: #555;
+      }
+      textarea {
+        resize: none;
+      }
+      .discussion-box {
+        background-color: #e4e4e4;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="menu-toggle">
+      <div class="icon">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="menu-text">Menu</div>
+    </div>
+
+    <div id="menu" class="menu">
+      <ul>
+        <li><a href="JDM Autohause.html">Main Page</a></li>
+        <li><a href="shopping.html">Showroom</a></li>
+        <li><a href="sparepart.html">Spare part & Acc</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="testimonial.html">Testimonial</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="event.html">Events</a></li>
+      </ul>
+    </div>
+    <header>
+      <h1>Comunity JDM Autohause</h1>
+      <img
+        src="https://i.imgur.com/CaaJQ6Z.gif"
+        alt="Logo JDM Autohause"
+        width="10%"
+      />
+      <p>
+        Bergabunglah dengan komunitas kami dan temukan sesama penggemar JDM.
+      </p>
+      <div class="search-container">
+        <button class="search-button">
+          <img
+            src="https://img.icons8.com/ios-filled/50/ffffff/search--v1.png"
+            alt="Search Icon"
+          />
+        </button>
+        <div class="search-bar">
+          <input type="text" placeholder="Search..." />
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <h2>Galeri</h2>
+      <p></p>
+      <div class="gallery">
+        <img
+          src="https://www.carmudi.co.id/journal/wp-content/uploads/2018/07/IMG_20180723_124022.jpg"
+          alt="Gathering JDM 1"
+          width="30%"
+          style="margin: 10px"
+        />
+        <img
+          src="https://balitribune.co.id/sites/default/files/styles/xtra_large/public/field/image/0803%20otoflash_Komunitas%20Mobil%20JDM.jpg?itok=RHcewe8V"
+          alt="Gathering JDM 2"
+          width="30%"
+          style="margin: 10px"
+        />
+        <img
+          src="https://nmaa.co.id/wp-content/uploads/2024/05/JDM-Fest-2024-ulti-pics-3-696x522.jpeg"
+          alt="Gathering JDM 3"
+          width="30%"
+          style="margin: 10px"
+        />
+        <img
+          src="https://cdn1-production-images-kly.akamaized.net/5_-1-9lz-eiN04K6TdPAT0qyB-E=/0x0:1479x1109/750x0/filters:quality(75):strip_icc():format(jpeg):watermark(kly-media-production/assets/images/watermarks/otosia/watermark-color-square.png,590,20,0)/kly-media-production/medias/4593754/original/045375800_1696072294-S__2670754_0.jpg"
+          alt="Gathering JDM 4"
+          width="30%"
+          style="margin: 10px"
+        />
+        <img
+          src="https://japaholic.id/wp-content/uploads/2024/10/rachel-florencia-foto-dengan-mobil-JDM-1024x683.jpg"
+          alt="Gathering JDM 5"
+          width="30%"
+          style="margin: 10px"
+        />
+        <img
+          src="https://cdn.getyourguide.com/img/tour/64170ddf16ed2acb005ca5f7c7c41d3204e4aa24bd06d5264490687060f0194e.png/146.jpg"
+          alt="Gathering JDM 6"
+          width="30%"
+          style="margin: 10px"
+        />
+      </div>
+      <h2>Berita Otomotif</h2>
+      <div
+        style="
+          border: 1px solid #ccc;
+          padding: 20px;
+          background-color: #fff;
+          border-radius: 10px;
+          max-height: 500px; /* Increased from 400px to 500px */
+          overflow-y: auto;
+        "
+      >
+        <div
+          style="
+            background-color: #e8e8e8;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+          "
+        >
+          <h3>Peluncuran Mobil Baru</h3>
+          <p>
+            Produsen mobil ternama meluncurkan model terbaru dengan fitur
+            canggih dan desain yang modern.
+          </p>
+          <a
+            href="https://otomotif.bisnis.com/read/20250205/275/1836876/bocoran-mobil-baru-yang-melantai-di-iims-2025-ada-toyota-hingga-byd"
+            target="_blank"
+          >
+            <img
+              src="https://images.bisnis.com/posts/2025/02/05/1836876/geely_1737897742.jpg"
+              alt="Peluncuran Mobil Baru"
+              width="100%"
+            />
+          </a>
+        </div>
+        <div
+          style="
+            background-color: #e8e8e8;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+          "
+        >
+          <h3>Pameran Otomotif Internasional</h3>
+          <p>
+            KELILING IIMS 2024 YANG BANYAK KEJUTAN, Saya ajak Anda berkeliling
+            IIMS 2024 melihat deretan mobil terbaru, sekaligus menengok 2 mobil
+            baru yang sudah saya pesan.
+          </p>
+          <iframe
+            width="100%"
+            height="315"
+            src="https://www.youtube.com/embed/oM5jijN1ERA"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+        <div
+          style="
+            background-color: #e8e8e8;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+          "
+        >
+          <h3>Teknologi Ramah Lingkungan</h3>
+          <p>
+            SUZUKI KENALKAN “SUZUKI SMART HYBRID” TEKNOLOGI TERBARU YANG RAMAH
+            LINGKUNGAN, HEMAT BAHAN BAKAR, DAN HARGA TERJANGKAU
+          </p>
+          <a
+            href="https://www.suzuki.co.id/news/suzuki-kenalkan-suzuki-smart-hybrid-teknologi-terbaru-yang-ramah-lingkungan-hemat-bahan-bakar-dan-harga-terjangkau"
+            target="_blank"
+          >
+            <img
+              src="https://www.suzukicdn.com/uploads/news/suzuki-kenalkan-suzuki-smart-hybrid-teknologi-terbaru-yang-ramah-lingkungan-hemat-bahan-bakar-dan-harga-terjangkau_thumb.webp"
+              alt="Teknologi Ramah Lingkungan"
+              width="100%"
+            />
+          </a>
+        </div>
+        <div
+          style="
+            background-color: #e8e8e8;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+          "
+        >
+          <h3>Tips Membeli Mobil Bekas</h3>
+          <p>
+            tips penting yang perlu diperhatikan saat membeli mobil bekas agar
+            mendapatkan kendaraan yang berkualitas.
+          </p>
+          <iframe
+            width="100%"
+            height="315"
+            src="https://www.youtube.com/embed/-mghAlvVvII"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+        <div
+          style="
+            background-color: #e8e8e8;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+          "
+        >
+          <h3>HONDA CRV HYBRID: APAKAH PANTAS SEHARGA 800 JUTA??</h3>
+          <p>
+            Review HONDA CRV HYBRID, menampilkan fitur-fitur canggih dan
+            performa yang mengesankan.
+          </p>
+          <iframe
+            width="100%"
+            height="315"
+            src="https://www.youtube.com/embed/4E4TnekZpX8"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+        <div
+          style="
+            background-color: #e8e8e8;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+          "
+        >
+          <h3>Modifikasi Skyline ER34 Full Carbon</h3>
+          <p>Modifikasi GD Paling Gila‼️ | Skyline ER34 Full Carbon.</p>
+          <iframe
+            width="100%"
+            height="315"
+            src="https://www.youtube.com/embed/jy45OJMYUEo"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
+
+      <h2>Tips Perawatan Mobil</h2>
+      <div
+        style="
+          border: 1px solid #ccc;
+          padding: 20px;
+          background-color: #fff;
+          border-radius: 10px;
+          max-height: 300px;
+          overflow-y: auto;
+        "
+      >
+        <h3>Perawatan Rutin:</h3>
+        <ul>
+          <li>
+            <strong>Ganti Oli Mesin:</strong> Ganti oli mesin secara teratur
+            sesuai dengan rekomendasi pabrikan atau setiap 5.000-10.000 km. Oli
+            yang bersih dan berkualitas akan menjaga mesin tetap bekerja dengan
+            baik.
+          </li>
+          <li>
+            <strong>Periksa Cairan:</strong> Periksa level dan kondisi cairan
+            lainnya seperti air radiator, minyak rem, minyak power steering, dan
+            cairan wiper. Pastikan tidak ada kebocoran dan segera tambahkan jika
+            kurang.
+          </li>
+          <li>
+            <strong>Periksa Tekanan Ban:</strong> Periksa tekanan ban secara
+            berkala dan sesuaikan dengan rekomendasi pabrikan. Tekanan ban yang
+            tepat akan meningkatkan efisiensi bahan bakar dan umur ban.
+          </li>
+          <li>
+            <strong>Periksa Lampu-lampu:</strong> Pastikan semua lampu mobil
+            berfungsi dengan baik, termasuk lampu utama, lampu sein, lampu rem,
+            dan lampu kabut.
+          </li>
+          <li>
+            <strong>Periksa Filter:</strong> Ganti filter udara, filter oli, dan
+            filter bahan bakar secara berkala. Filter yang bersih akan menjaga
+            kinerja mesin tetap optimal.
+          </li>
+        </ul>
+        <h3>Perawatan Berkala:</h3>
+        <ul>
+          <li>
+            <strong>Servis Rutin:</strong> Lakukan servis rutin di bengkel
+            langganan sesuai dengan jadwal yang ditentukan. Servis rutin
+            meliputi pengecekan dan penggantian komponen yang aus atau rusak.
+          </li>
+          <li>
+            <strong>Spooring dan Balancing:</strong> Lakukan spooring dan
+            balancing roda secara berkala untuk menjaga stabilitas mobil dan
+            mencegah keausan ban yang tidak merata.
+          </li>
+          <li>
+            <strong>Tune Up:</strong> Lakukan tune up mesin secara berkala untuk
+            menjaga kinerja mesin tetap optimal dan efisien.
+          </li>
+          <li>
+            <strong>Periksa Rem:</strong> Periksa kondisi kampas rem dan cakram
+            rem secara berkala. Ganti jika sudah aus atau rusak.
+          </li>
+          <li>
+            <strong>Periksa Kaki-kaki:</strong> Periksa kondisi kaki-kaki mobil
+            secara berkala, seperti shockbreaker, tie rod, dan ball joint. Ganti
+            jika ada yang rusak atau aus.
+          </li>
+        </ul>
+        <h3>Perawatan Tambahan:</h3>
+        <ul>
+          <li>
+            <strong>Cuci Mobil:</strong> Cuci mobil secara teratur untuk menjaga
+            kebersihan dan mencegah karat. Gunakan sabun mobil yang tidak
+            merusak cat.
+          </li>
+          <li>
+            <strong>Wax Mobil:</strong> Berikan wax pada mobil secara berkala
+            untuk melindungi cat dari sinar UV dan menjaga kilau mobil.
+          </li>
+          <li>
+            <strong>Periksa Kondisi Aki:</strong> Periksa kondisi aki secara
+            berkala, seperti level air aki dan terminal aki. Bersihkan terminal
+            aki jika berkarat.
+          </li>
+          <li>
+            <strong>Jaga Kebersihan Interior:</strong> Bersihkan interior mobil
+            secara teratur, seperti karpet, jok, dan dashboard. Gunakan vacuum
+            cleaner untuk membersihkan debu dan kotoran.
+          </li>
+          <li>
+            <strong>Parkir di Tempat Teduh:</strong> Parkir mobil di tempat
+            teduh untuk melindungi cat dari sinar UV dan panas matahari.
+          </li>
+        </ul>
+        <h3>Tips Tambahan:</h3>
+        <ul>
+          <li>
+            <strong>Panaskan Mesin:</strong> Panaskan mesin mobil selama
+            beberapa menit sebelum digunakan, terutama saat cuaca dingin.
+          </li>
+          <li>
+            <strong>Gunakan Bahan Bakar yang Tepat:</strong> Gunakan bahan bakar
+            yang sesuai dengan rekomendasi pabrikan.
+          </li>
+          <li>
+            <strong>Hindari Mengemudi Agresif:</strong> Hindari mengemudi
+            agresif, seperti sering melakukan pengereman mendadak atau
+            akselerasi yang berlebihan.
+          </li>
+          <li>
+            <strong>Perhatikan Tanda-tanda Kerusakan:</strong> Perhatikan
+            tanda-tanda kerusakan pada mobil, seperti suara aneh, lampu
+            peringatan menyala, atau performa mobil menurun. Segera bawa mobil
+            ke bengkel jika ada masalah.
+          </li>
+        </ul>
+      </div>
+      <h2>Forum Diskusi</h2>
+      <div
+        style="
+          border: 1px solid #ccc;
+          padding: 20px;
+          background-color: #fff;
+          border-radius: 10px;
+          max-height: 200px;
+          overflow-y: auto;
+        "
+      >
+        <div class="discussion-box">
+          <p>
+            <strong>Pertanyaan (Payeng):</strong> Bagaimana cara meningkatkan
+            performa mesin RB26DETT?
+          </p>
+        </div>
+        <div class="discussion-box">
+          <p>
+            <strong>Jawaban (Admin):</strong> Anda bisa mulai dengan mengganti
+            turbo dan memasang intercooler yang lebih besar.
+          </p>
+        </div>
+        <div class="discussion-box">
+          <p>
+            <strong>Jawaban (Varva):</strong> Jangan lupa untuk melakukan
+            remapping ECU setelah modifikasi.
+          </p>
+        </div>
+        <div class="discussion-box">
+          <p>
+            <strong>Pertanyaan (Raka):</strong> Apakah ada rekomendasi membeli
+            mobil sedan yang bagus?
+          </p>
+        </div>
+        <div class="discussion-box">
+          <p>
+            <strong>Jawaban (Admin):</strong> Kami merekomendasikan untuk
+            membeli Porsche 911 yang ada di showroom kami, karena mobil ini
+            memiliki performa yang sangat baik.
+          </p>
+        </div>
+        <div class="discussion-box">
+          <p>
+            <strong>Pertanyaan (Yoan):</strong> Berapa biaya yang diperlukan
+            untuk Velg BBS ring 18 untuk 2 pasang
+          </p>
+        </div>
+        <div class="discussion-box">
+          <p>
+            <strong>Jawaban (Mayfa):</strong> kalau Velg BBS baru original Mulai
+            dari Rp30.000.000 hingga Rp60.000.000 atau lebih.
+          </p>
+        </div>
+        <div class="discussion-box">
+          <p>
+            <strong>Pertanyaan (Ni**a):</strong> Apakah ada risiko kerusakan
+            mesin jika melakukan swap mesin?
+          </p>
+        </div>
+        <div class="discussion-box">
+          <p>
+            <strong>Jawaban (Admin):</strong> Selama dilakukan dengan benar dan
+            oleh profesional, risikonya bisa diminimalisir.
+          </p>
+        </div>
+        <div class="discussion-box">
+          <p>
+            <strong>Pertanyaan (Reza):</strong> Apakah ada perbedaan performa
+            yang signifikan setelah modifikasi?
+          </p>
+        </div>
+        <div class="discussion-box">
+          <p>
+            <strong>Jawaban (Mas Amba):</strong> Ya, performa mesin akan
+            meningkat signifikan, terutama dalam hal tenaga dan respons.
+          </p>
+        </div>
+      </div>
+      <div
+        style="
+          border: 1px solid #ccc;
+          padding: 20px;
+          background-color: #fff;
+          border-radius: 10px;
+          margin-top: 20px;
+        "
+      >
+        <h3>Silahkan berikan pertanyaan anda</h3>
+        <textarea
+          style="
+            width: 100%;
+            height: 100px;
+            border-radius: 5px;
+            padding: 10px;
+            border: 1px solid #ccc;
+          "
+          placeholder="Tuliskan pertanyaan anda..."
+        ></textarea>
+        <button
+          style="
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+          "
+        >
+          Kirim
+        </button>
+      </div>
+      <h2>Media Sosial</h2>
+      <p>
+        Bergabunglah dengan komunitas JDM di media sosial untuk mendapatkan
+        update terbaru, berbagi pengalaman, dan berinteraksi dengan sesama
+        penggemar JDM.
+      </p>
+      <div class="social-media">
+        <a href="https://www.instagram.com/jdmfest_id/" target="_blank">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a
+          href="https://www.facebook.com/groups/490586854326101/"
+          target="_blank"
+        >
+          <i class="fab fa-facebook"></i>
+        </a>
+        <a href="https://www.youtube.com/@jdmindonesia" target="_blank">
+          <i class="fab fa-youtube"></i>
+        </a>
+      </div>
+      <p></p>
+    </div>
+    <footer>
+      <div class="footer-logo-container">
+        <img
+          src="https://i.imgur.com/7EhoJPv.png"
+          alt="Logo Kiri"
+          class="footer-logo left-logo"
+          width="50px"
+          style="float: left; margin-right: 10px"
+        />
+        <p style="display: inline-block">
+          &copy; 2025 JDM Autohause. All Rights Reserved.
+        </p>
+        <img
+          src="https://i.imgur.com/7EhoJPv.png"
+          alt="Logo Kanan"
+          class="footer-logo right-logo"
+          width="50px"
+          style="float: right; margin-left: 10px"
+        />
+      </div>
+    </footer>
+    <script>
+      const menuToggle = document.querySelector(".menu-toggle");
+      const menu = document.querySelector("#menu");
+      menuToggle.addEventListener("click", () => {
+        menu.classList.toggle("active");
+      });
+    </script>
+  </body>
+</html>

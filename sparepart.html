@@ -1,0 +1,2393 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spare part</title>
+    <link rel="icon" href="https://imgur.com/7EhoJPv.png" type="image/x-icon" />
+    <style>
+      body {
+        font-family: "Roboto", sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        color: #333;
+      }
+      header {
+        background: #222;
+        color: white;
+        text-align: center;
+        padding: 20px;
+        position: relative;
+      }
+      .container {
+        width: 80%;
+        margin: auto;
+        overflow: hidden;
+        padding: 20px;
+      }
+      .container h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 2em;
+        color: #444;
+      }
+      footer {
+        background: #222;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        margin-top: 20px;
+      }
+      .menu-toggle {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        background-color: #333;
+        padding: 10px;
+        border-radius: 5px;
+        color: white;
+        transition: background-color 0.3s;
+        z-index: 1000;
+      }
+      .menu-toggle:hover {
+        background-color: #555;
+      }
+      .menu-toggle .icon {
+        display: flex;
+        flex-direction: column;
+        margin-right: 10px;
+      }
+      .menu-toggle span {
+        display: block;
+        width: 20px;
+        height: 2px;
+        background-color: white;
+        margin-bottom: 5px;
+        transition: all 0.3s;
+      }
+      .menu-toggle span:hover {
+        background-color: #666;
+      }
+      .menu-text {
+        font-size: 18px;
+        color: white;
+      }
+      .menu {
+        display: none;
+        position: absolute;
+        top: 60px;
+        left: 20px;
+        background-color: #fff;
+        color: #000;
+        padding: 0 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: max-height 0.5s ease, padding 0.5s ease, opacity 0.5s ease;
+        z-index: 999;
+      }
+      .menu.active {
+        display: block;
+        max-height: 500px;
+        padding: 20px;
+        opacity: 1;
+      }
+      .menu ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .menu ul li {
+        margin: 10px 0;
+      }
+      .menu ul li a {
+        text-decoration: none;
+        color: #333;
+        font-size: 18px;
+        padding: 10px 20px;
+        display: block;
+        border-radius: 5px;
+        transition: background-color 0.3s, color 0.3s;
+        text-align: center;
+      }
+      .menu ul li a:hover {
+        background-color: #ddd;
+        color: #000;
+      }
+      @media (max-width: 768px) {
+        .menu {
+          width: 100%;
+          left: 0;
+          top: 40px;
+          border-radius: 0;
+        }
+        .menu-toggle {
+          top: 5px;
+          left: 5px;
+        }
+        .container {
+          width: 100%;
+          padding: 10px;
+        }
+        .part-item {
+          width: 100%;
+        }
+        .search-container {
+          position: static;
+          text-align: center;
+          margin-top: 10px;
+        }
+        .search-bar {
+          position: static;
+          width: 100%;
+        }
+        .modal-content {
+          width: 90%;
+        }
+      }
+      @media (max-width: 480px) {
+        .menu ul li a {
+          font-size: 16px;
+          padding: 8px 10px;
+        }
+        header h1 {
+          font-size: 24px;
+        }
+        .menu-toggle {
+          top: 10px;
+          left: 10px;
+        }
+        .part-item {
+          width: 100%;
+        }
+        .part-details h3 {
+          font-size: 18px;
+        }
+        .part-price {
+          font-size: 16px;
+        }
+        .order-button {
+          padding: 8px 16px;
+        }
+        .modal-content {
+          width: 95%;
+        }
+      }
+      .part-gallery {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+      }
+      .part-item {
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 300px;
+        text-align: center;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+      .part-item:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+      }
+      .part-item img {
+        width: 100%;
+        border-radius: 10px;
+      }
+      .part-details {
+        margin-top: 10px;
+      }
+      .part-price {
+        font-size: 18px;
+        color: #333;
+        margin: 10px 0;
+      }
+      .order-button {
+        background-color: #333;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      .order-button:hover {
+        background-color: #8f8e8e;
+      }
+      .footer-logo-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .footer-logo {
+        width: 50px;
+      }
+      .search-container {
+        text-align: right;
+        margin-top: 10px;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+      }
+      .search-button {
+        background-color: #333;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      .search-button:hover {
+        background-color: #555;
+      }
+      .search-button img {
+        width: 20px;
+        height: 20px;
+      }
+      .search-bar {
+        display: none;
+        position: absolute;
+        top: 40px;
+        right: 0;
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 5px;
+        width: 200px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .search-container:hover .search-bar {
+        display: block;
+      }
+      .search-bar input {
+        width: 100%;
+        border: none;
+        outline: none;
+        padding: 5px;
+      }
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(5px);
+      }
+      .modal-content {
+        background-color: #fff;
+        margin: 10% auto;
+        padding: 20px;
+        border: none;
+        width: 80%;
+        max-width: 600px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .close {
+        color: #aaa;
+        align-self: flex-end;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      .close:hover,
+      .close:focus {
+        color: black;
+      }
+      .modal-content img {
+        width: 100%;
+        max-width: 200px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+      }
+      .modal-content h2 {
+        margin: 10px 0;
+        font-size: 24px;
+        color: #333;
+      }
+      .modal-content p {
+        margin: 5px 0;
+        color: #555;
+      }
+      .modal-content ul {
+        list-style-type: disc;
+        padding-left: 20px;
+        margin: 10px 0;
+        text-align: left;
+      }
+      .checkout-button {
+        background-color: #333;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin-top: 20px;
+      }
+      .checkout-button:hover {
+        background-color: #555;
+      }
+      .features-benefits {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+      }
+      .features-benefits > div {
+        flex: 1;
+      }
+      .quantity-container {
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .quantity-container label {
+        font-size: 16px;
+        color: #333;
+      }
+      .quantity-container input {
+        width: 60px;
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="menu-toggle">
+      <div class="icon">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="menu-text">Menu</div>
+    </div>
+
+    <div id="menu" class="menu">
+      <ul>
+        <li><a href="JDM Autohause.html">Main Page</a></li>
+        <li><a href="shopping.html">Showroom</a></li>
+        <li><a href="comunity.html">Comunity</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="testimonial.html">Testimonial</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="event.html">Events</a></li>
+      </ul>
+    </div>
+    <header>
+      <h1>Spare part & Acc JDM Autohause</h1>
+      <img
+        src="https://i.imgur.com/CaaJQ6Z.gif"
+        alt="Logo JDM Autohause"
+        width="10%"
+      />
+      <p>Find the best spare parts and accessories for your car.</p>
+      <div class="search-container">
+        <button class="search-button">
+          <img
+            src="https://img.icons8.com/ios-filled/50/ffffff/search--v1.png"
+            alt="Search Icon"
+          />
+        </button>
+        <div class="search-bar">
+          <input type="text" placeholder="Search..." />
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <h2>Spare Parts</h2>
+      <div class="part-gallery">
+        <div class="part-item">
+          <img
+            src="https://www.spk.co.jp/english/wp-content/uploads/sites/2/2022/07/TURBOCHARGER-w.jpg"
+            alt="Turbocharger"
+          />
+          <div class="part-details">
+            <h3>Turbocharger</h3>
+            <p>
+              Tambah tenaga pada mesin mobil dengan turbocharger berkualitas
+              tinggi.
+            </p>
+            <p class="part-price">Price: $2,500</p>
+            <button class="order-button" data-modal="turbochargerModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="part-item">
+          <img src="https://i.imgur.com/HdFgVUU.jpeg" alt="Exhaust System" />
+          <div class="part-details">
+            <h3>Exhaust System</h3>
+            <p>
+              Sistem knalpot yang meningkatkan performa dan suara mobil Anda.
+            </p>
+            <p class="part-price">Price: $1,800</p>
+            <button class="order-button" data-modal="exhaustModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="part-item">
+          <img
+            src="https://www.elevatecars.com/wp-content/uploads/2022/06/products-slide72.jpg"
+            alt="Brake Pads"
+          />
+          <div class="part-details">
+            <h3>Brake Pads</h3>
+            <p>
+              Kampas rem berkualitas tinggi untuk pengereman yang lebih aman.
+            </p>
+            <p class="part-price">Price: $250</p>
+            <button class="order-button" data-modal="brakePadsModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="part-item">
+          <img
+            src="https://cdn11.bigcommerce.com/s-wz6faydtva/images/stencil/1280x1280/products/654/3880/Leaf-Strut_Kit_PX__26065.1658106455.1280.1280__83834.1708063187.jpg?c=1&imbypass=on"
+            alt="Suspension Kit"
+          />
+          <div class="part-details">
+            <h3>Suspension Kit</h3>
+            <p>
+              Kit suspensi untuk meningkatkan kenyamanan dan handling mobil.
+            </p>
+            <p class="part-price">Price: $1,200</p>
+            <button class="order-button" data-modal="suspensionKitModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="part-item">
+          <img
+            src="https://www.myjdmaddiction.com/image/cache/catalog/Acuity/1891-FLTR_3_900x-1280x720.jpeg"
+            alt="Air Filter"
+          />
+          <div class="part-details">
+            <h3>Air Filter</h3>
+            <p>
+              Filter udara berkualitas tinggi untuk performa mesin yang lebih
+              baik.
+            </p>
+            <p class="part-price">Price: $60</p>
+            <button class="order-button" data-modal="airFilterModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="part-item">
+          <img
+            src="https://woodmizer.eu/media/catalog/product/o/i/oil_filter.jpg?quality=80&fit=bounds&height=720&width=1280"
+            alt="Oil Filter"
+          />
+          <div class="part-details">
+            <h3>Oil Filter</h3>
+            <p>Filter oli berkualitas tinggi untuk menjaga kebersihan mesin.</p>
+            <p class="part-price">Price: $35</p>
+            <button class="order-button" data-modal="oilFilterModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="part-item">
+          <img
+            src="https://imgd.aeplcdn.com/1280x720//n/cw/ec/177291/infographics0.png?isig=1&q=75"
+            alt="Spark Plugs"
+          />
+          <div class="part-details">
+            <h3>Spark Plugs</h3>
+            <p>Busi berkualitas tinggi untuk pembakaran yang lebih efisien.</p>
+            <p class="part-price">Price: $120</p>
+            <button class="order-button" data-modal="sparkPlugsModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="part-item">
+          <img
+            src="https://www.burton-racing.com/cdn/shop/products/PLM-RD-K-SWAP-FULL3_2048x.webp?v=1676305474"
+            alt="Radiator"
+          />
+          <div class="part-details">
+            <h3>Radiator</h3>
+            <p>
+              Radiator berkualitas tinggi untuk menjaga suhu mesin tetap stabil.
+            </p>
+            <p class="part-price">Price: $600</p>
+            <button class="order-button" data-modal="radiatorModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="part-item">
+          <img
+            src="https://i.imgur.com/HdFgVUU.jpeg"
+            alt="Performance Exhaust"
+          />
+          <div class="part-details">
+            <h3>Performance Exhaust</h3>
+            <p>Exhaust sistem yang meningkatkan performa dan suara mesin.</p>
+            <p class="part-price">Price: $2,000</p>
+            <button class="order-button" data-modal="performanceExhaustModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="part-item">
+          <img
+            src="https://www.myjdmaddiction.com/image/cache/catalog/exedy/e6336cfe-8ae4-41ad-a478-a99027b029dc-800-1280x720.jpg"
+            alt="Clutch Plate"
+          />
+          <div class="part-details">
+            <h3>Clutch Plate</h3>
+            <p>Piringan kopling berkualitas tinggi untuk performa terbaik.</p>
+            <p class="part-price">Price: $350</p>
+            <button class="order-button" data-modal="clutchPlateModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="part-item">
+          <img src="https://i.imgur.com/2Kxu2eC.jpeg" alt="Exhaust System" />
+          <div class="part-details">
+            <h3>Exhaust System</h3>
+            <p>
+              Sistem knalpot yang meningkatkan efisiensi dan suara mobil Anda.
+            </p>
+            <p class="part-price">Price: $1,700</p>
+            <button class="order-button" data-modal="exhaustSystemModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="part-item">
+          <img
+            src="https://www.myjdmaddiction.com/image/cache/catalog/exedy/71mBLK7ASzL._SL1500_-1280x720.jpg"
+            alt="Clutch Kit"
+          />
+          <div class="part-details">
+            <h3>Clutch Kit</h3>
+            <p>
+              Kit kopling untuk mobil yang membutuhkan penggantian atau upgrade.
+            </p>
+            <p class="part-price">Price: $700</p>
+            <button class="order-button" data-modal="clutchKitModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="part-item">
+          <img
+            src="https://senaautopart.com/wp-content/uploads/2022/08/TTX22m.2-1-1280x720-1.png"
+            alt="Shockbreaker"
+          />
+          <div class="part-details">
+            <h3>Shockbreaker</h3>
+            <p>Menyerap guncangan dan getaran dari jalan.</p>
+            <p class="part-price">Price: $450</p>
+            <button class="order-button" data-modal="shockbreakerModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <h2>Accessories</h2>
+      <div class="part-gallery">
+        <div class="part-item">
+          <img
+            src="https://4.imimg.com/data4/DP/AX/MY-27324564/waterproof-car-cover-500x500.jpg"
+            alt="Car Cover"
+          />
+          <div class="part-details">
+            <h3>Car Cover</h3>
+            <p>Lindungi mobil Anda dengan penutup mobil berkualitas tinggi.</p>
+            <p class="part-price">Price: $120</p>
+            <button class="order-button" data-modal="carCoverModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="part-item">
+          <img
+            src="https://4.imimg.com/data4/OJ/QW/MY-35225346/designer-car-seat-cover-500x500.jpg"
+            alt="Seat Covers"
+          />
+          <div class="part-details">
+            <h3>Seat Covers</h3>
+            <p>
+              Cover jok yang stylish untuk kenyamanan dan perlindungan ekstra.
+            </p>
+            <p class="part-price">Price: $180</p>
+            <button class="order-button" data-modal="seatCoversModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="part-item">
+          <img
+            src="https://sparco-corsa.com/wp-content/uploads/2022/08/SPS131bk-2-small-500x500.jpg"
+            alt="Steering Wheel Cover"
+          />
+          <div class="part-details">
+            <h3>Steering Wheel Cover</h3>
+            <p>Tingkatkan pegangan Anda dengan cover setir premium.</p>
+            <p class="part-price">Price: $60</p>
+            <button class="order-button" data-modal="steeringWheelCoverModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="part-item">
+          <img
+            src="https://image.made-in-china.com/202f0j00nlJWViUPbKfQ/Interlocking-Rubber-Floor-Mat-Restaurant-Kitchen-Mat-Commercial-Entrance-Door-Mat-Durable-Non-Slip-Bar-Mat-Utility-Drainage-Mat-Indoor-Outdoor-Wet-Areas-3-X-3.webp"
+            alt="Floor Mats"
+          />
+          <div class="part-details">
+            <h3>Floor Mats</h3>
+            <p>
+              Karpet lantai yang tahan lama untuk menjaga kebersihan mobil Anda.
+            </p>
+            <p class="part-price">Price: $35</p>
+            <button class="order-button" data-modal="floorMatsModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="part-item">
+          <img
+            src="https://gettecla.com/cdn/shop/products/7_500x500.png?v=1682104768"
+            alt="Phone Mount"
+          />
+          <div class="part-details">
+            <h3>Phone Mount</h3>
+            <p>Mount ponsel yang praktis untuk penggunaan hands-free.</p>
+            <p class="part-price">Price: $30</p>
+            <button class="order-button" data-modal="phoneMountModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="part-item">
+          <img
+            src="https://image.made-in-china.com/2f0j00oJulFSsKpZkU/150d-Polyester-Car-Side-Window-Sun-Shade-Car-Sunshade-for-Universal-Car.webp"
+            alt="Sunshade"
+          />
+          <div class="part-details">
+            <h3>Sunshade</h3>
+            <p>Jaga mobil Anda tetap sejuk dengan sunshade reflektif.</p>
+            <p class="part-price">Price: $35</p>
+            <button class="order-button" data-modal="sunshadeModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="part-item">
+          <img
+            src="https://images.tokopedia.net/img/cache/500-square/VqbcmM/2024/8/8/f148e036-518c-4ed6-85ba-038cbf53e37e.png"
+            alt="Car Vacuum"
+          />
+          <div class="part-details">
+            <h3>Car Vacuum</h3>
+            <p>
+              Vacuum cleaner yang ringkas untuk membersihkan mobil dengan mudah.
+            </p>
+            <p class="part-price">Price: $25</p>
+            <button class="order-button" data-modal="carVacuumModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="part-item">
+          <img
+            src="https://images.tokopedia.net/img/cache/500-square/VqbcmM/2024/6/20/8a6bb84f-16ac-46c0-a8cb-0681a847617e.png"
+            alt="Dash Cam"
+          />
+          <div class="part-details">
+            <h3>Dash Cam</h3>
+            <p>Rekam perjalanan Anda dengan dash cam berdefinisi tinggi.</p>
+            <p class="part-price">Price: $100</p>
+            <button class="order-button" data-modal="dashCamModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="part-item">
+          <img
+            src="https://down-id.img.susercontent.com/file/sg-11134201-22120-9sosmeb6fskv53"
+            alt="Air Freshener"
+          />
+          <div class="part-details">
+            <h3>Air Freshener</h3>
+            <p>
+              Jaga mobil Anda tetap harum dengan pengharum udara berkualitas.
+            </p>
+            <p class="part-price">Price: $40</p>
+            <button class="order-button" data-modal="airFreshenerModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="part-item">
+          <img
+            src="https://images.tokopedia.net/img/cache/500-square/VqbcmM/2023/9/2/ed8034ca-ae9a-42a9-a020-c10eaa0b8a8f.jpg"
+            alt="Car Organizer"
+          />
+          <div class="part-details">
+            <h3>Car Organizer</h3>
+            <p>Atur mobil Anda dengan organizer mobil multi-saku.</p>
+            <p class="part-price">Price: $50</p>
+            <button class="order-button" data-modal="carOrganizerModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="part-item">
+          <img
+            src="https://www.kroger.com/product/images/large/front/0074615576844"
+            alt="LED Interior Lights"
+          />
+          <div class="part-details">
+            <h3>LED Interior Lights</h3>
+            <p>Tingkatkan interior mobil Anda dengan lampu LED.</p>
+            <p class="part-price">Price: $80</p>
+            <button class="order-button" data-modal="ledInteriorLightsModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="part-item">
+          <img
+            src="https://boutique.peugeot.com/media/catalog/product/cache/a841bb86472d3dbe084e748c24c6d913/s/a/sac-organisateur-de-coffre-0_7.jpg"
+            alt="Trunk Organizer"
+          />
+          <div class="part-details">
+            <h3>Trunk Organizer</h3>
+            <p>Jaga bagasi Anda tetap rapi dengan organizer yang luas.</p>
+            <p class="part-price">Price: $120</p>
+            <button class="order-button" data-modal="trunkOrganizerModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="part-item">
+          <img
+            src="https://5.imimg.com/data5/SELLER/Default/2022/9/BF/BP/SO/25919197/1-500x500.jpg"
+            alt="Jump Starter"
+          />
+          <div class="part-details">
+            <h3>Jump Starter</h3>
+            <p>Jump starter portabel untuk situasi darurat.</p>
+            <p class="part-price">Price: $40</p>
+            <button class="order-button" data-modal="jumpStarterModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+        <div class="part-item">
+          <img
+            src="https://s.alicdn.com/@sc04/kf/HTB1q_EQXPnuK1RkSmFPq6AuzFXaB.jpg_720x720q50.jpg"
+            alt="Bluetooth Adapter"
+          />
+          <div class="part-details">
+            <h3>Bluetooth Adapter</h3>
+            <p>Hubungkan ponsel Anda ke sistem audio mobil secara nirkabel.</p>
+            <p class="part-price">Price: $45</p>
+            <button class="order-button" data-modal="bluetoothAdapterModal">
+              Order Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="turbochargerModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://www.spk.co.jp/english/wp-content/uploads/sites/2/2022/07/TURBOCHARGER-w.jpg"
+          alt="Turbocharger"
+        />
+        <h2>Turbocharger</h2>
+        <p>Price: $2,500</p>
+        <p>Rating: ⭐⭐⭐⭐⭐</p>
+        <p>Reviews: 209</p>
+        <p>Sold: 391 units</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Turbocharger dirancang untuk meningkatkan output daya mesin mobil Anda
+          dengan memaksa udara terkompresi ekstra ke dalam ruang bakar.
+          Turbocharger berkualitas tinggi ini terbuat dari bahan yang tahan lama
+          dan dirancang untuk memberikan kinerja dan keandalan maksimum.
+        </p>
+        <div class="features-benefits">
+          <div>
+            <h3>Fitur</h3>
+            <ul>
+              <li>Roda kompresor efisiensi tinggi</li>
+              <li>Rumah turbin yang tahan lama</li>
+              <li>Seimbang dengan presisi untuk operasi yang halus</li>
+              <li>Kompatibel dengan berbagai jenis kendaraan</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Manfaat</h3>
+            <ul>
+              <li>Meningkatkan daya dan torsi mesin</li>
+              <li>Meningkatkan efisiensi bahan bakar</li>
+              <li>Meningkatkan pengalaman berkendara secara keseluruhan</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quantity-container">
+          <label for="quantity">Quantity:</label>
+          <input
+            type="number"
+            id="quantity"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Turbocharger"
+          data-price="2500"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+    <div id="exhaustModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img src="https://i.imgur.com/HdFgVUU.jpeg" alt="Exhaust System" />
+        <h2>Exhaust System</h2>
+        <p>Price: $1,800</p>
+        <p>Rating: ⭐⭐⭐⭐⭐</p>
+        <p>Reviews: 357</p>
+        <p>Sold: 566 units</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Sistem knalpot ini dirancang untuk meningkatkan performa dan suara
+          mobil Anda. Terbuat dari bahan berkualitas tinggi, sistem knalpot ini
+          memberikan kinerja yang optimal dan tahan lama.
+        </p>
+        <div class="features-benefits">
+          <div>
+            <h3>Fitur</h3>
+            <ul>
+              <li>Desain efisiensi tinggi</li>
+              <li>Bahan tahan lama</li>
+              <li>Kompatibel dengan berbagai jenis kendaraan</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Manfaat</h3>
+            <ul>
+              <li>Meningkatkan daya dan torsi mesin</li>
+              <li>Meningkatkan efisiensi bahan bakar</li>
+              <li>Meningkatkan pengalaman berkendara secara keseluruhan</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quantity-container">
+          <label for="quantity-exhaust">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-exhaust"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Exhaust System"
+          data-price="1800"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+    <div id="brakePadsModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://www.elevatecars.com/wp-content/uploads/2022/06/products-slide72.jpg"
+          alt="Brake Pads"
+        />
+        <h2>Brake Pads</h2>
+        <p>Price: $250</p>
+        <p>Rating: ⭐⭐⭐⭐⭐</p>
+        <p>Reviews: 1654</p>
+        <p>Sold: 2643 units</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Kampas rem berkualitas tinggi ini dirancang untuk memberikan
+          pengereman yang lebih aman dan efisien. Terbuat dari bahan yang tahan
+          lama, kampas rem ini memastikan kinerja optimal dalam berbagai kondisi
+          berkendara.
+        </p>
+        <div class="features-benefits">
+          <div>
+            <h3>Fitur</h3>
+            <ul>
+              <li>Bahan tahan lama</li>
+              <li>Desain efisiensi tinggi</li>
+              <li>Kompatibel dengan berbagai jenis kendaraan</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Manfaat</h3>
+            <ul>
+              <li>Meningkatkan keamanan pengereman</li>
+              <li>Meningkatkan efisiensi bahan bakar</li>
+              <li>Meningkatkan pengalaman berkendara secara keseluruhan</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quantity-container">
+          <label for="quantity-brakePads">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-brakePads"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Brake Pads"
+          data-price="250"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+    <div id="suspensionKitModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://cdn11.bigcommerce.com/s-wz6faydtva/images/stencil/1280x1280/products/654/3880/Leaf-Strut_Kit_PX__26065.1658106455.1280.1280__83834.1708063187.jpg?c=1&imbypass=on"
+          alt="Suspension Kit"
+        />
+        <h2>Suspension Kit</h2>
+        <p>Price: $1,200</p>
+        <p>Rating: ⭐⭐⭐⭐⭐</p>
+        <p>Reviews: 111</p>
+        <p>Sold: 344 units</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Kit suspensi ini dirancang untuk meningkatkan kenyamanan dan handling
+          mobil Anda. Terbuat dari bahan berkualitas tinggi, kit suspensi ini
+          memberikan kinerja yang optimal dan tahan lama.
+        </p>
+        <div class="features-benefits">
+          <div>
+            <h3>Fitur</h3>
+            <ul>
+              <li>Desain efisiensi tinggi</li>
+              <li>Bahan tahan lama</li>
+              <li>Kompatibel dengan berbagai jenis kendaraan</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Manfaat</h3>
+            <ul>
+              <li>Meningkatkan kenyamanan berkendara</li>
+              <li>Meningkatkan handling kendaraan</li>
+              <li>Meningkatkan pengalaman berkendara secara keseluruhan</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quantity-container">
+          <label for="quantity-suspensionKit">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-suspensionKit"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Suspension Kit"
+          data-price="1200"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+    <div id="airFilterModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://www.myjdmaddiction.com/image/cache/catalog/Acuity/1891-FLTR_3_900x-1280x720.jpeg"
+          alt="Air Filter"
+        />
+        <h2>Air Filter</h2>
+        <p>Price: $60</p>
+        <p>Rating: ⭐⭐⭐⭐⭐</p>
+        <p>Reviews: 2451</p>
+        <p>Sold: 5432 units</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Filter udara berkualitas tinggi ini dirancang untuk meningkatkan
+          performa mesin dengan menyaring udara yang masuk ke mesin. Terbuat
+          dari bahan yang tahan lama, filter udara ini memastikan kinerja
+          optimal dalam berbagai kondisi berkendara.
+        </p>
+        <div class="features-benefits">
+          <div>
+            <h3>Fitur</h3>
+            <ul>
+              <li>Bahan tahan lama</li>
+              <li>Desain efisiensi tinggi</li>
+              <li>Kompatibel dengan berbagai jenis kendaraan</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Manfaat</h3>
+            <ul>
+              <li>Meningkatkan performa mesin</li>
+              <li>Meningkatkan efisiensi bahan bakar</li>
+              <li>Meningkatkan pengalaman berkendara secara keseluruhan</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quantity-container">
+          <label for="quantity-airFilter">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-airFilter"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Air Filter"
+          data-price="60"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+    <div id="oilFilterModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://woodmizer.eu/media/catalog/product/o/i/oil_filter.jpg?quality=80&fit=bounds&height=720&width=1280"
+          alt="Oil Filter"
+        />
+        <h2>Oil Filter</h2>
+        <p>Price: $35</p>
+        <p>Rating: ⭐⭐⭐⭐⭐</p>
+        <p>Reviews: 1821</p>
+        <p>Sold: 2195 units</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Filter oli berkualitas tinggi ini dirancang untuk menjaga kebersihan
+          mesin dengan menyaring kotoran dari oli. Terbuat dari bahan yang tahan
+          lama, filter oli ini memastikan kinerja optimal dalam berbagai kondisi
+          berkendara.
+        </p>
+        <div class="features-benefits">
+          <div>
+            <h3>Fitur</h3>
+            <ul>
+              <li>Bahan tahan lama</li>
+              <li>Desain efisiensi tinggi</li>
+              <li>Kompatibel dengan berbagai jenis kendaraan</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Manfaat</h3>
+            <ul>
+              <li>Meningkatkan kebersihan mesin</li>
+              <li>Meningkatkan efisiensi bahan bakar</li>
+              <li>Meningkatkan pengalaman berkendara secara keseluruhan</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quantity-container">
+          <label for="quantity-oilFilter">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-oilFilter"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Oil Filter"
+          data-price="35"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+    <div id="sparkPlugsModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://imgd.aeplcdn.com/1280x720//n/cw/ec/177291/infographics0.png?isig=1&q=75"
+          alt="Spark Plugs"
+        />
+        <h2>Spark Plugs</h2>
+        <p>Price: $120</p>
+        <p>Rating: ⭐⭐⭐⭐⭐</p>
+        <p>Reviews: 417</p>
+        <p>Sold: 781 units</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Busi berkualitas tinggi ini dirancang untuk memberikan pembakaran yang
+          lebih efisien dan meningkatkan performa mesin. Terbuat dari bahan yang
+          tahan lama, busi ini memastikan kinerja optimal dalam berbagai kondisi
+          berkendara.
+        </p>
+        <div class="features-benefits">
+          <div>
+            <h3>Fitur</h3>
+            <ul>
+              <li>Bahan tahan lama</li>
+              <li>Desain efisiensi tinggi</li>
+              <li>Kompatibel dengan berbagai jenis kendaraan</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Manfaat</h3>
+            <ul>
+              <li>Meningkatkan performa mesin</li>
+              <li>Meningkatkan efisiensi bahan bakar</li>
+              <li>Meningkatkan pengalaman berkendara secara keseluruhan</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quantity-container">
+          <label for="quantity-sparkPlugs">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-sparkPlugs"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Spark Plugs"
+          data-price="120"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+    <div id="radiatorModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://www.burton-racing.com/cdn/shop/products/PLM-RD-K-SWAP-FULL3_2048x.webp?v=1676305474"
+          alt="Radiator"
+        />
+        <h2>Radiator</h2>
+        <p>Price: $600</p>
+        <p>Rating: ⭐⭐⭐⭐⭐</p>
+        <p>Reviews: 91</p>
+        <p>Sold: 378 units</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Radiator berkualitas tinggi ini dirancang untuk menjaga suhu mesin
+          tetap stabil dan mencegah overheating. Terbuat dari bahan yang tahan
+          lama, radiator ini memastikan kinerja optimal dalam berbagai kondisi
+          berkendara.
+        </p>
+        <div class="features-benefits">
+          <div>
+            <h3>Fitur</h3>
+            <ul>
+              <li>Bahan tahan lama</li>
+              <li>Desain efisiensi tinggi</li>
+              <li>Kompatibel dengan berbagai jenis kendaraan</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Manfaat</h3>
+            <ul>
+              <li>Meningkatkan performa mesin</li>
+              <li>Meningkatkan efisiensi bahan bakar</li>
+              <li>Meningkatkan pengalaman berkendara secara keseluruhan</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quantity-container">
+          <label for="quantity-radiator">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-radiator"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Radiator"
+          data-price="600"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+    <div id="performanceExhaustModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img src="https://i.imgur.com/HdFgVUU.jpeg" alt="Performance Exhaust" />
+        <h2>Performance Exhaust</h2>
+        <p>Price: $2,000</p>
+        <p>Rating: ⭐⭐⭐⭐⭐</p>
+        <p>Reviews: 61</p>
+        <p>Sold: 122 units</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Exhaust sistem berkualitas tinggi ini dirancang untuk meningkatkan
+          performa dan suara mesin mobil Anda. Terbuat dari bahan yang tahan
+          lama, exhaust sistem ini memastikan kinerja optimal dalam berbagai
+          kondisi berkendara.
+        </p>
+        <div class="features-benefits">
+          <div>
+            <h3>Fitur</h3>
+            <ul>
+              <li>Bahan tahan lama</li>
+              <li>Desain efisiensi tinggi</li>
+              <li>Kompatibel dengan berbagai jenis kendaraan</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Manfaat</h3>
+            <ul>
+              <li>Meningkatkan performa mesin</li>
+              <li>Meningkatkan efisiensi bahan bakar</li>
+              <li>Meningkatkan pengalaman berkendara secara keseluruhan</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quantity-container">
+          <label for="quantity-performanceExhaust">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-performanceExhaust"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Performance Exhaust"
+          data-price="2000"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+    <div id="clutchPlateModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://www.myjdmaddiction.com/image/cache/catalog/exedy/e6336cfe-8ae4-41ad-a478-a99027b029dc-800-1280x720.jpg"
+          alt="Clutch Plate"
+        />
+        <h2>Clutch Plate</h2>
+        <p>Price: $350</p>
+        <p>Rating: ⭐⭐⭐⭐⭐</p>
+        <p>Reviews: 763</p>
+        <p>Sold: 2312 units</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Piringan kopling berkualitas tinggi ini dirancang untuk memberikan
+          performa terbaik dan daya tahan yang lama. Terbuat dari bahan yang
+          tahan lama, piringan kopling ini memastikan kinerja optimal dalam
+          berbagai kondisi berkendara.
+        </p>
+        <div class="features-benefits">
+          <div>
+            <h3>Fitur</h3>
+            <ul>
+              <li>Bahan tahan lama</li>
+              <li>Desain efisiensi tinggi</li>
+              <li>Kompatibel dengan berbagai jenis kendaraan</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Manfaat</h3>
+            <ul>
+              <li>Meningkatkan performa mesin</li>
+              <li>Meningkatkan efisiensi bahan bakar</li>
+              <li>Meningkatkan pengalaman berkendara secara keseluruhan</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quantity-container">
+          <label for="quantity-clutchPlate">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-clutchPlate"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Clutch Plate"
+          data-price="350"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+    <div id="exhaustSystemModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img src="https://i.imgur.com/2Kxu2eC.jpeg" alt="Exhaust System" />
+        <h2>Exhaust System</h2>
+        <p>Price: $1,700</p>
+        <p>Rating: ⭐⭐⭐⭐⭐</p>
+        <p>Reviews: 366</p>
+        <p>Sold: 516 units</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Sistem knalpot berkualitas tinggi ini dirancang untuk meningkatkan
+          efisiensi dan suara mobil Anda. Terbuat dari bahan yang tahan lama,
+          sistem knalpot ini memastikan kinerja optimal dalam berbagai kondisi
+          berkendara.
+        </p>
+        <div class="features-benefits">
+          <div>
+            <h3>Fitur</h3>
+            <ul>
+              <li>Bahan tahan lama</li>
+              <li>Desain efisiensi tinggi</li>
+              <li>Kompatibel dengan berbagai jenis kendaraan</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Manfaat</h3>
+            <ul>
+              <li>Meningkatkan performa mesin</li>
+              <li>Meningkatkan efisiensi bahan bakar</li>
+              <li>Meningkatkan pengalaman berkendara secara keseluruhan</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quantity-container">
+          <label for="quantity-exhaustSystem">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-exhaustSystem"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Exhaust System"
+          data-price="1700"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+    <div id="clutchKitModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://www.myjdmaddiction.com/image/cache/catalog/exedy/71mBLK7ASzL._SL1500_-1280x720.jpg"
+          alt="Clutch Kit"
+        />
+        <h2>Clutch Kit</h2>
+        <p>Price: $700</p>
+        <p>Rating: ⭐⭐⭐⭐⭐</p>
+        <p>Reviews: 1233</p>
+        <p>Sold: 5123 units</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Kit kopling berkualitas tinggi ini dirancang untuk memberikan performa
+          terbaik dan daya tahan yang lama. Terbuat dari bahan yang tahan lama,
+          kit kopling ini memastikan kinerja optimal dalam berbagai kondisi
+          berkendara.
+        </p>
+        <div class="features-benefits">
+          <div>
+            <h3>Fitur</h3>
+            <ul>
+              <li>Bahan tahan lama</li>
+              <li>Desain efisiensi tinggi</li>
+              <li>Kompatibel dengan berbagai jenis kendaraan</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Manfaat</h3>
+            <ul>
+              <li>Meningkatkan performa mesin</li>
+              <li>Meningkatkan efisiensi bahan bakar</li>
+              <li>Meningkatkan pengalaman berkendara secara keseluruhan</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quantity-container">
+          <label for="quantity-clutchKit">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-clutchKit"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Clutch Kit"
+          data-price="700"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+    <div id="shockbreakerModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://senaautopart.com/wp-content/uploads/2022/08/TTX22m.2-1-1280x720-1.png"
+          alt="Shockbreaker"
+        />
+        <h2>Shockbreaker</h2>
+        <p>Price: $450</p>
+        <p>Rating: ⭐⭐⭐⭐⭐</p>
+        <p>Reviews: 910</p>
+        <p>Sold: 1291 units</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Shockbreaker berkualitas tinggi ini dirancang untuk menyerap guncangan
+          dan getaran dari jalan, memberikan kenyamanan berkendara yang lebih
+          baik. Terbuat dari bahan yang tahan lama, shockbreaker ini memastikan
+          kinerja optimal dalam berbagai kondisi berkendara.
+        </p>
+        <div class="features-benefits">
+          <div>
+            <h3>Fitur</h3>
+            <ul>
+              <li>Bahan tahan lama</li>
+              <li>Desain efisiensi tinggi</li>
+              <li>Kompatibel dengan berbagai jenis kendaraan</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Manfaat</h3>
+            <ul>
+              <li>Meningkatkan kenyamanan berkendara</li>
+              <li>Meningkatkan handling kendaraan</li>
+              <li>Meningkatkan pengalaman berkendara secara keseluruhan</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quantity-container">
+          <label for="quantity-shockbreaker">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-shockbreaker"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Shockbreaker"
+          data-price="450"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+    <div id="carCoverModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://4.imimg.com/data4/DP/AX/MY-27324564/waterproof-car-cover-500x500.jpg"
+          alt="Car Cover"
+        />
+        <h2>Car Cover</h2>
+        <p>Price: $120</p>
+        <p>Rating: ⭐⭐⭐⭐⭐</p>
+        <p>Reviews: 506</p>
+        <p>Sold: 971 units</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Penutup mobil berkualitas tinggi ini dirancang untuk melindungi mobil
+          Anda dari debu, hujan, dan sinar UV. Terbuat dari bahan yang tahan
+          lama, penutup mobil ini memastikan perlindungan optimal dalam berbagai
+          kondisi cuaca.
+        </p>
+        <div class="features-benefits">
+          <div>
+            <h3>Fitur</h3>
+            <ul>
+              <li>Bahan tahan lama</li>
+              <li>Desain efisiensi tinggi</li>
+              <li>Kompatibel dengan berbagai jenis kendaraan</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Manfaat</h3>
+            <ul>
+              <li>Melindungi mobil dari debu dan kotoran</li>
+              <li>Melindungi mobil dari sinar UV</li>
+              <li>Meningkatkan umur kendaraan</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quantity-container">
+          <label for="quantity-carCover">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-carCover"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Car Cover"
+          data-price="120"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+    <div id="seatCoversModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://4.imimg.com/data4/OJ/QW/MY-35225346/designer-car-seat-cover-500x500.jpg"
+          alt="Seat Covers"
+        />
+        <h2>Seat Covers</h2>
+        <p>Price: $180</p>
+        <p>Rating: ⭐⭐⭐⭐⭐</p>
+        <p>Reviews: 123</p>
+        <p>Sold: 456 units</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Cover jok yang stylish untuk kenyamanan dan perlindungan ekstra.
+          Terbuat dari bahan berkualitas tinggi, cover jok ini memastikan
+          kenyamanan dan perlindungan optimal.
+        </p>
+        <div class="features-benefits">
+          <div>
+            <h3>Fitur</h3>
+            <ul>
+              <li>Bahan tahan lama</li>
+              <li>Desain stylish</li>
+              <li>Kompatibel dengan berbagai jenis kendaraan</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Manfaat</h3>
+            <ul>
+              <li>Meningkatkan kenyamanan berkendara</li>
+              <li>Melindungi jok dari kerusakan</li>
+              <li>Meningkatkan tampilan interior mobil</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quantity-container">
+          <label for="quantity-seatCovers">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-seatCovers"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Seat Covers"
+          data-price="180"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+    <div id="steeringWheelCoverModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://sparco-corsa.com/wp-content/uploads/2022/08/SPS131bk-2-small-500x500.jpg"
+          alt="Steering Wheel Cover"
+        />
+        <h2>Steering Wheel Cover</h2>
+        <p>Price: $60</p>
+        <p>Rating: ⭐⭐⭐⭐⭐</p>
+        <p>Reviews: 89</p>
+        <p>Sold: 234 units</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Cover setir premium ini dirancang untuk meningkatkan pegangan dan
+          kenyamanan saat berkendara. Terbuat dari bahan berkualitas tinggi,
+          cover setir ini memastikan kinerja optimal dalam berbagai kondisi
+          berkendara.
+        </p>
+        <div class="features-benefits">
+          <div>
+            <h3>Fitur</h3>
+            <ul>
+              <li>Bahan tahan lama</li>
+              <li>Desain stylish</li>
+              <li>Kompatibel dengan berbagai jenis kendaraan</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Manfaat</h3>
+            <ul>
+              <li>Meningkatkan kenyamanan berkendara</li>
+              <li>Meningkatkan pegangan setir</li>
+              <li>Meningkatkan tampilan interior mobil</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quantity-container">
+          <label for="quantity-steeringWheelCover">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-steeringWheelCover"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Steering Wheel Cover"
+          data-price="60"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+    <div id="floorMatsModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://image.made-in-china.com/202f0j00nlJWViUPbKfQ/Interlocking-Rubber-Floor-Mat-Restaurant-Kitchen-Mat-Commercial-Entrance-Door-Mat-Durable-Non-Slip-Bar-Mat-Utility-Drainage-Mat-Indoor-Outdoor-Wet-Areas-3-X-3.webp"
+          alt="Floor Mats"
+        />
+        <h2>Floor Mats</h2>
+        <p>Price: $35</p>
+        <p>Rating: ⭐⭐⭐⭐⭐</p>
+        <p>Reviews: 145</p>
+        <p>Sold: 321 units</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Karpet lantai yang tahan lama ini dirancang untuk menjaga kebersihan
+          mobil Anda. Terbuat dari bahan berkualitas tinggi, karpet lantai ini
+          memastikan perlindungan optimal dalam berbagai kondisi berkendara.
+        </p>
+        <div class="features-benefits">
+          <div>
+            <h3>Fitur</h3>
+            <ul>
+              <li>Bahan tahan lama</li>
+              <li>Desain efisiensi tinggi</li>
+              <li>Kompatibel dengan berbagai jenis kendaraan</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Manfaat</h3>
+            <ul>
+              <li>Melindungi lantai mobil dari kotoran</li>
+              <li>Meningkatkan kebersihan interior mobil</li>
+              <li>Meningkatkan tampilan interior mobil</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quantity-container">
+          <label for="quantity-floorMats">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-floorMats"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Floor Mats"
+          data-price="35"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+    <div id="phoneMountModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://gettecla.com/cdn/shop/products/7_500x500.png?v=1682104768"
+          alt="Phone Mount"
+        />
+        <h2>Phone Mount</h2>
+        <p>Price: $30</p>
+        <p>Rating: ⭐⭐⭐⭐⭐</p>
+        <p>Reviews: 78</p>
+        <p>Sold: 189 units</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Mount ponsel yang praktis ini dirancang untuk penggunaan hands-free
+          saat berkendara. Terbuat dari bahan berkualitas tinggi, mount ponsel
+          ini memastikan ponsel Anda tetap aman dan mudah diakses.
+        </p>
+        <div class="features-benefits">
+          <div>
+            <h3>Fitur</h3>
+            <ul>
+              <li>Bahan tahan lama</li>
+              <li>Desain praktis</li>
+              <li>Kompatibel dengan berbagai jenis ponsel</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Manfaat</h3>
+            <ul>
+              <li>Meningkatkan kenyamanan berkendara</li>
+              <li>Memudahkan akses ke ponsel</li>
+              <li>Meningkatkan keamanan berkendara</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quantity-container">
+          <label for="quantity-phoneMount">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-phoneMount"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Phone Mount"
+          data-price="30"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+    <div id="sunshadeModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://image.made-in-china.com/2f0j00oJulFSsKpZkU/150d-Polyester-Car-Side-Window-Sun-Shade-Car-Sunshade-for-Universal-Car.webp"
+          alt="Sunshade"
+        />
+        <h2>Sunshade</h2>
+        <p>Price: $35</p>
+        <p>Rating: ⭐⭐⭐⭐⭐</p>
+        <p>Reviews: 102</p>
+        <p>Sold: 245 units</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Sunshade reflektif ini dirancang untuk menjaga mobil Anda tetap sejuk
+          dengan menghalangi sinar matahari langsung. Terbuat dari bahan
+          berkualitas tinggi, sunshade ini memastikan perlindungan optimal dalam
+          berbagai kondisi cuaca.
+        </p>
+        <div class="features-benefits">
+          <div>
+            <h3>Fitur</h3>
+            <ul>
+              <li>Bahan tahan lama</li>
+              <li>Desain reflektif</li>
+              <li>Kompatibel dengan berbagai jenis kendaraan</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Manfaat</h3>
+            <ul>
+              <li>Melindungi interior mobil dari sinar UV</li>
+              <li>Meningkatkan kenyamanan berkendara</li>
+              <li>Meningkatkan umur kendaraan</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quantity-container">
+          <label for="quantity-sunshade">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-sunshade"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button class="checkout-button" data-product="Sunshade" data-price="35">
+          Checkout
+        </button>
+      </div>
+    </div>
+    <div id="carVacuumModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://images.tokopedia.net/img/cache/500-square/VqbcmM/2024/8/8/f148e036-518c-4ed6-85ba-038cbf53e37e.png"
+          alt="Car Vacuum"
+        />
+        <h2>Car Vacuum</h2>
+        <p>Price: $25</p>
+        <p>Rating: ⭐⭐⭐⭐⭐</p>
+        <p>Reviews: 67</p>
+        <p>Sold: 154 units</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Vacuum cleaner yang ringkas ini dirancang untuk membersihkan mobil
+          dengan mudah. Terbuat dari bahan berkualitas tinggi, vacuum cleaner
+          ini memastikan kinerja optimal dalam berbagai kondisi.
+        </p>
+        <div class="features-benefits">
+          <div>
+            <h3>Fitur</h3>
+            <ul>
+              <li>Bahan tahan lama</li>
+              <li>Desain ringkas</li>
+              <li>Kompatibel dengan berbagai jenis kendaraan</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Manfaat</h3>
+            <ul>
+              <li>Memudahkan pembersihan interior mobil</li>
+              <li>Meningkatkan kebersihan kendaraan</li>
+              <li>Meningkatkan kenyamanan berkendara</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quantity-container">
+          <label for="quantity-carVacuum">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-carVacuum"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Car Vacuum"
+          data-price="25"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+    <div id="dashCamModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://images.tokopedia.net/img/cache/500-square/VqbcmM/2024/6/20/8a6bb84f-16ac-46c0-a8cb-0681a847617e.png"
+          alt="Dash Cam"
+        />
+        <h2>Dash Cam</h2>
+        <p>Price: $100</p>
+        <p>Rating: ⭐⭐⭐⭐⭐</p>
+        <p>Reviews: 89</p>
+        <p>Sold: 234 units</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Dash cam berdefinisi tinggi ini dirancang untuk merekam perjalanan
+          Anda dengan jelas dan detail. Terbuat dari bahan berkualitas tinggi,
+          dash cam ini memastikan kinerja optimal dalam berbagai kondisi
+          berkendara.
+        </p>
+        <div class="features-benefits">
+          <div>
+            <h3>Fitur</h3>
+            <ul>
+              <li>Bahan tahan lama</li>
+              <li>Desain kompak</li>
+              <li>Kompatibel dengan berbagai jenis kendaraan</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Manfaat</h3>
+            <ul>
+              <li>Meningkatkan keamanan berkendara</li>
+              <li>Merekam perjalanan dengan jelas</li>
+              <li>Meningkatkan kenyamanan berkendara</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quantity-container">
+          <label for="quantity-dashCam">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-dashCam"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Dash Cam"
+          data-price="100"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+    <div id="airFreshenerModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://down-id.img.susercontent.com/file/sg-11134201-22120-9sosmeb6fskv53"
+          alt="Air Freshener"
+        />
+        <h2>Air Freshener</h2>
+        <p>Price: $40</p>
+        <p>Rating: ⭐⭐⭐⭐⭐</p>
+        <p>Reviews: 102</p>
+        <p>Sold: 245 units</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Pengharum udara berkualitas tinggi ini dirancang untuk menjaga mobil
+          Anda tetap harum dan segar. Terbuat dari bahan berkualitas tinggi,
+          pengharum udara ini memastikan aroma yang tahan lama dan menyenangkan.
+        </p>
+        <div class="features-benefits">
+          <div>
+            <h3>Fitur</h3>
+            <ul>
+              <li>Aroma tahan lama</li>
+              <li>Desain elegan</li>
+              <li>Kompatibel dengan berbagai jenis kendaraan</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Manfaat</h3>
+            <ul>
+              <li>Meningkatkan kenyamanan berkendara</li>
+              <li>Meningkatkan kesegaran udara di dalam mobil</li>
+              <li>Meningkatkan pengalaman berkendara secara keseluruhan</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quantity-container">
+          <label for="quantity-airFreshener">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-airFreshener"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Air Freshener"
+          data-price="40"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+    <div id="carOrganizerModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://images.tokopedia.net/img/cache/500-square/VqbcmM/2023/9/2/ed8034ca-ae9a-42a9-a020-c10eaa0b8a8f.jpg"
+          alt="Car Organizer"
+        />
+        <h2>Car Organizer</h2>
+        <p>Price: $50</p>
+        <p>Rating: ⭐⭐⭐⭐⭐</p>
+        <p>Reviews: 78</p>
+        <p>Sold: 189 units</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Organizer mobil multi-saku ini dirancang untuk membantu Anda mengatur
+          barang-barang di dalam mobil dengan lebih rapi. Terbuat dari bahan
+          berkualitas tinggi, organizer ini memastikan barang-barang Anda tetap
+          aman dan mudah diakses.
+        </p>
+        <div class="features-benefits">
+          <div>
+            <h3>Fitur</h3>
+            <ul>
+              <li>Bahan tahan lama</li>
+              <li>Desain multi-saku</li>
+              <li>Kompatibel dengan berbagai jenis kendaraan</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Manfaat</h3>
+            <ul>
+              <li>Meningkatkan kenyamanan berkendara</li>
+              <li>Memudahkan akses ke barang-barang</li>
+              <li>Meningkatkan kebersihan interior mobil</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quantity-container">
+          <label for="quantity-carOrganizer">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-carOrganizer"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Car Organizer"
+          data-price="50"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+    <div id="ledInteriorLightsModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://www.kroger.com/product/images/large/front/0074615576844"
+          alt="LED Interior Lights"
+        />
+        <h2>LED Interior Lights</h2>
+        <p>Price: $80</p>
+        <p>Rating: ⭐⭐⭐⭐⭐</p>
+        <p>Reviews: 145</p>
+        <p>Sold: 321 units</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Lampu LED interior berkualitas tinggi ini dirancang untuk meningkatkan
+          tampilan dan pencahayaan interior mobil Anda. Terbuat dari bahan
+          berkualitas tinggi, lampu LED ini memastikan kinerja optimal dalam
+          berbagai kondisi berkendara.
+        </p>
+        <div class="features-benefits">
+          <div>
+            <h3>Fitur</h3>
+            <ul>
+              <li>Bahan tahan lama</li>
+              <li>Desain efisiensi tinggi</li>
+              <li>Kompatibel dengan berbagai jenis kendaraan</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Manfaat</h3>
+            <ul>
+              <li>Meningkatkan tampilan interior mobil</li>
+              <li>Meningkatkan pencahayaan interior</li>
+              <li>Meningkatkan pengalaman berkendara secara keseluruhan</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quantity-container">
+          <label for="quantity-ledInteriorLights">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-ledInteriorLights"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="LED Interior Lights"
+          data-price="80"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+    <div id="trunkOrganizerModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://boutique.peugeot.com/media/catalog/product/cache/a841bb86472d3dbe084e748c24c6d913/s/a/sac-organisateur-de-coffre-0_7.jpg"
+          alt="Trunk Organizer"
+        />
+        <h2>Trunk Organizer</h2>
+        <p>Price: $120</p>
+        <p>Rating: ⭐⭐⭐⭐⭐</p>
+        <p>Reviews: 102</p>
+        <p>Sold: 245 units</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Organizer bagasi yang luas ini dirancang untuk membantu Anda mengatur
+          barang-barang di dalam bagasi mobil dengan lebih rapi. Terbuat dari
+          bahan berkualitas tinggi, organizer ini memastikan barang-barang Anda
+          tetap aman dan mudah diakses.
+        </p>
+        <div class="features-benefits">
+          <div>
+            <h3>Fitur</h3>
+            <ul>
+              <li>Bahan tahan lama</li>
+              <li>Desain multi-kompartemen</li>
+              <li>Kompatibel dengan berbagai jenis kendaraan</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Manfaat</h3>
+            <ul>
+              <li>Meningkatkan kenyamanan berkendara</li>
+              <li>Memudahkan akses ke barang-barang</li>
+              <li>Meningkatkan kebersihan interior mobil</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quantity-container">
+          <label for="quantity-trunkOrganizer">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-trunkOrganizer"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Trunk Organizer"
+          data-price="120"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+    <div id="jumpStarterModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://5.imimg.com/data5/SELLER/Default/2022/9/BF/BP/SO/25919197/1-500x500.jpg"
+          alt="Jump Starter"
+        />
+        <h2>Jump Starter</h2>
+        <p>Price: $40</p>
+        <p>Rating: ⭐⭐⭐⭐⭐</p>
+        <p>Reviews: 78</p>
+        <p>Sold: 189 units</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Jump starter portabel ini dirancang untuk membantu Anda menghidupkan
+          kembali mesin mobil yang mati dalam situasi darurat. Terbuat dari
+          bahan berkualitas tinggi, jump starter ini memastikan kinerja optimal
+          dalam berbagai kondisi.
+        </p>
+        <div class="features-benefits">
+          <div>
+            <h3>Fitur</h3>
+            <ul>
+              <li>Bahan tahan lama</li>
+              <li>Desain portabel</li>
+              <li>Kompatibel dengan berbagai jenis kendaraan</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Manfaat</h3>
+            <ul>
+              <li>Meningkatkan keamanan berkendara</li>
+              <li>Memudahkan penghidupan mesin dalam situasi darurat</li>
+              <li>Meningkatkan kenyamanan berkendara</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quantity-container">
+          <label for="quantity-jumpStarter">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-jumpStarter"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Jump Starter"
+          data-price="40"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+    <div id="bluetoothAdapterModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img
+          src="https://s.alicdn.com/@sc04/kf/HTB1q_EQXPnuK1RkSmFPq6AuzFXaB.jpg_720x720q50.jpg"
+          alt="Bluetooth Adapter"
+        />
+        <h2>Bluetooth Adapter</h2>
+        <p>Price: $45</p>
+        <p>Rating: ⭐⭐⭐⭐⭐</p>
+        <p>Reviews: 89</p>
+        <p>Sold: 234 units</p>
+        <h3>Deskripsi</h3>
+        <p>
+          Bluetooth adapter ini dirancang untuk menghubungkan ponsel Anda ke
+          sistem audio mobil secara nirkabel. Terbuat dari bahan berkualitas
+          tinggi, adapter ini memastikan koneksi yang stabil dan suara yang
+          jernih.
+        </p>
+        <div class="features-benefits">
+          <div>
+            <h3>Fitur</h3>
+            <ul>
+              <li>Bahan tahan lama</li>
+              <li>Desain kompak</li>
+              <li>Kompatibel dengan berbagai jenis ponsel</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Manfaat</h3>
+            <ul>
+              <li>Meningkatkan kenyamanan berkendara</li>
+              <li>Memudahkan akses ke ponsel</li>
+              <li>Meningkatkan kualitas suara</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quantity-container">
+          <label for="quantity-bluetoothAdapter">Quantity:</label>
+          <input
+            type="number"
+            id="quantity-bluetoothAdapter"
+            name="quantity"
+            min="1"
+            value="1"
+          />
+        </div>
+        <button
+          class="checkout-button"
+          data-product="Bluetooth Adapter"
+          data-price="45"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+    <footer>
+      <div class="footer-logo-container">
+        <img
+          src="https://i.imgur.com/7EhoJPv.png"
+          alt="Logo Kiri"
+          class="footer-logo left-logo"
+          width="50px"
+        />
+        <p>&copy; 2025 JDM Autohause. All Rights Reserved.</p>
+        <img
+          src="https://i.imgur.com/7EhoJPv.png"
+          alt="Logo Kanan"
+          class="footer-logo right-logo"
+          width="50px"
+        />
+      </div>
+    </footer>
+    <script>
+      const menuToggle = document.querySelector(".menu-toggle");
+      const menu = document.querySelector("#menu");
+      menuToggle.addEventListener("click", () => {
+        menu.classList.toggle("active");
+      });
+
+      const modals = document.querySelectorAll(".modal");
+      const orderButtons = document.querySelectorAll(".order-button");
+      const closeButtons = document.querySelectorAll(".close");
+
+      orderButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const modalId = button.getAttribute("data-modal");
+          document.getElementById(modalId).style.display = "block";
+        });
+      });
+
+      closeButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          button.closest(".modal").style.display = "none";
+        });
+      });
+
+      window.addEventListener("click", (event) => {
+        modals.forEach((modal) => {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        });
+      });
+
+      const checkoutButtons = document.querySelectorAll(".checkout-button");
+
+      checkoutButtons.forEach((button) => {
+        button.addEventListener("click", (event) => {
+          const quantityInput =
+            button.previousElementSibling.querySelector("input");
+          if (quantityInput.value < 1) {
+            quantityInput.value = 1;
+          }
+          const quantity = quantityInput.value;
+          const product = button.getAttribute("data-product");
+          const unitPrice = button.getAttribute("data-price");
+          window.location.href = `checkout.html?product=${product}&quantity=${quantity}&unitPrice=${unitPrice}`;
+        });
+      });
+
+      const quantityInputs = document.querySelectorAll('input[type="number"]');
+      quantityInputs.forEach((input) => {
+        input.addEventListener("input", () => {
+          if (input.value < 1) {
+            input.value = 1;
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
